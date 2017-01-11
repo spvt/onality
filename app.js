@@ -41,10 +41,6 @@ app.post('/searchKeyword', function(req, res){
   client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=10`, function(error, tweets, response) {
     if(error) console.log(error);
 
-app.get('/', function(req, res){
-  client.get('https://api.twitter.com/1.1/search/tweets.json?q=macbook&count=10', function(error, tweets, response) {
-  if(error) console.log(error);
-
   console.log(tweets.statuses[0].text);
   //console.log(response);  // Raw response object.
   tone_analyzer.tone({ text: tweets.statuses[0].text },
