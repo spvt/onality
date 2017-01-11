@@ -40,15 +40,14 @@ app.post('/searchKeyword', function(req, res){
   var keyword = req.body.keyword;
   client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=10`, function(error, tweets, response) {
     if(error) console.log(error);
-  //console.log(tweets);  // The
-  // tweets.statuses.forEach(function(tweet){
-  //   console.log(tweet.text);
-  //   console.log('By: ' + tweet.user.name);
-  // })
+
+app.get('/', function(req, res){
+  client.get('https://api.twitter.com/1.1/search/tweets.json?q=macbook&count=10', function(error, tweets, response) {
+  if(error) console.log(error);
 
   console.log(tweets.statuses[0].text);
   //console.log(response);  // Raw response object.
-tone_analyzer.tone({ text: tweets.statuses[0].text },
+  tone_analyzer.tone({ text: tweets.statuses[0].text },
   function(err, tone) {
     if (err)
       console.log(err);
@@ -58,6 +57,7 @@ tone_analyzer.tone({ text: tweets.statuses[0].text },
   res.send(tweets.statuses[0].text);
 });
 });
+
 
 app.listen('5000', function(){
   console.log('Running');
