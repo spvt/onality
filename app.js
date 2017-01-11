@@ -2,10 +2,23 @@
 var express  = require('express'),
     Twitter  = require('twitter'),
     watson   = require('watson-developer-cloud'),
+    bodyParser = require('body-parser'), // middleware to get data from forms. Express can't do this.
     ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3'),
     keys      = require('./api/apiKeys'),
     app      = express();
 
+
+//========SET VIEW ENGINE=======
+app.set('view engine', 'ejs');
+// urlencoded tells bodyParser to extract data from form element 
+// middleware to read JSON data
+app.use(bodyParser.urlencoded({extended: true}) )
+app.use(bodyParser.json());
+
+//========GET REQUEST FOR HOMEPAGE=======
+app.get('/', function(req, res) {
+  res.render('index.ejs');
+});
 
 //============Twitter===========
 var client = new Twitter({
@@ -22,23 +35,17 @@ var tone_analyzer = new ToneAnalyzerV3({
   version_date: '2016-05-19'
 });
 
-// tone_analyzer.tone({ text: 'Greetings from Watson Developer Cloud!' },
-//   function(err, tone) {
-//     if (err)
-//       console.log(err);
-//     else
-//       console.log(JSON.stringify(tone, null, 2));
-// });
-
-app.get('/', function(req, res){
-  client.get('https://api.twitter.com/1.1/search/tweets.json?q=macbook&count=10', function(error, tweets, response) {
+//========Call API's=======
+app.post('/searchKeyword', function(req, res){
+  var keyword = req.body.keyword;
+  client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=10`, function(error, tweets, response) {
   if(error) console.log(error);
   //console.log(tweets);  // The
   // tweets.statuses.forEach(function(tweet){
   //   console.log(tweet.text);
   //   console.log('By: ' + tweet.user.name);
   // })
-
+  // var tweetData = JSON.parse(tweets.statuses[0]);
   console.log(tweets.statuses[0].text);
   //console.log(response);  // Raw response object.
   tone_analyzer.tone({ text: tweets.statuses[0].text },
@@ -48,7 +55,7 @@ app.get('/', function(req, res){
     else
       console.log(JSON.stringify(tone, null, 2));
 });
-  res.send(tweets.statuses);
+  res.send(tweets.statuses[0].text);
 });
 });
 
