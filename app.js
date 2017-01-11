@@ -48,7 +48,7 @@ app.post('/searchKeyword', function(req, res){
 
   console.log(tweets.statuses[0].text);
   //console.log(response);  // Raw response object.
-  tone_analyzer.tone({ text: tweets.statuses[0].text },
+tone_analyzer.tone({ text: tweets.statuses[0].text },
   function(err, tone) {
     if (err)
       console.log(err);
@@ -58,7 +58,6 @@ app.post('/searchKeyword', function(req, res){
   res.send(tweets.statuses[0].text);
 });
 });
-
 
 app.listen('5000', function(){
   console.log('Running');
