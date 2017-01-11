@@ -10,7 +10,7 @@ var express  = require('express'),
 
 //========SET VIEW ENGINE=======
 app.set('view engine', 'ejs');
-// urlencoded tells bodyParser to extract data from form element 
+// urlencoded tells bodyParser to extract data from form element
 // middleware to read JSON data
 app.use(bodyParser.urlencoded({extended: true}) )
 app.use(bodyParser.json());
@@ -39,13 +39,13 @@ var tone_analyzer = new ToneAnalyzerV3({
 app.post('/searchKeyword', function(req, res){
   var keyword = req.body.keyword;
   client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=10`, function(error, tweets, response) {
-  if(error) console.log(error);
+    if(error) console.log(error);
   //console.log(tweets);  // The
   // tweets.statuses.forEach(function(tweet){
   //   console.log(tweet.text);
   //   console.log('By: ' + tweet.user.name);
   // })
-  // var tweetData = JSON.parse(tweets.statuses[0]);
+
   console.log(tweets.statuses[0].text);
   //console.log(response);  // Raw response object.
   tone_analyzer.tone({ text: tweets.statuses[0].text },
