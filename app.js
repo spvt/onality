@@ -42,7 +42,7 @@ var tone_analyzer = new ToneAnalyzerV3({
 
 //========Helper functions=======
 var getHighestToneScore = function(tones) {
-  var emotionTones = tones.document_tone.tone_categories[0].tones;  
+  var emotionTones = tones.document_tone.tone_categories[0].tones;
   return emotionTones.reduce(function(tone1, tone2) {
     return tone1.score > tone2.score ? tone1 : tone2;
   });
@@ -69,8 +69,8 @@ var getToneData = function(scoreData) {
 var getTweetData = function(keyword) {
   return new Promise(function(resolve, reject) {
     client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=10`, function(error, tweets, response) {
-      if(error) console.log(error);      
-      resolve(tweets);   
+      if(error) console.log(error);
+      resolve(tweets);
     });
   });
 };
@@ -82,6 +82,13 @@ app.post('/searchKeyword', function(req, res){
 
   client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=100`, function(error, tweets, response) {
     var highestTone = [];
+    var emotionObj         = {
+      Sadness : 0,
+      Anger   : 0,
+      Disgust : 0,
+      Fear    : 0,
+      Joy     : 0
+    }
 
     if(error) {
       console.log(error);
@@ -95,14 +102,23 @@ app.post('/searchKeyword', function(req, res){
               console.log(err);
             } else {
                var tone = tone.document_tone.tone_categories[0].tones;
-               highestTone.push([tweet.text,
-                   tone.reduce(function(tone1, tone2){
-                   if(tone1.score > tone2.score){
-                    return tone1;
-                   } else {
-                   return tone2;
-                  }
-               }), tweet.user.name]);
+               var singleTone = tone.reduce(function(tone1, tone2){
+                return tone1.score > tone2.score ? tone1 : tone2;
+               });
+               //console.log(singleTone.tone_name);
+              //  highestTone.push([tweet.text,
+              //      tone.reduce(function(tone1, tone2){
+              //      if(tone1.score > tone2.score){
+              //       return tone1;
+              //      } else {
+              //      return tone2;
+              //     }
+              //  }), tweet.user.name]);
+              if(!emotionObj[singleTone.tone_name]){
+                emotionObj[singleTone.tone_name] = 1;
+              } else {
+                emotionObj[singleTone.tone_name] ++;
+              }
                callback();
             }
           });
@@ -110,13 +126,15 @@ app.post('/searchKeyword', function(req, res){
           if(err){
             console.log(err);
           } else {
-            console.log(highestTone);
-            res.render('test', {highestTone: highestTone});
+            //res.send('Success');
+            res.render('test', {emotionObj: emotionObj, keyword : keyword});
           }
         });
       }
 
   }); // end Twitter Call
+
+});
 
 app.listen('5000', function(){
   console.log('Running');
