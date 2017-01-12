@@ -39,10 +39,10 @@ var tone_analyzer = new ToneAnalyzerV3({
 //========Call API's=======
 app.post('/searchKeyword', function(req, res){
   var keyword = req.body.keyword;
-  var highestTone = [];
 
 
   client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=100`, function(error, tweets, response) {
+    var highestTone = [];
 
     if(error) {
       console.log(error);
