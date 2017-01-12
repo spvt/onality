@@ -5,6 +5,7 @@ var express  = require('express'),
     bodyParser = require('body-parser'), // middleware to get data from forms. Express can't do this.
     ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3'),
     keys      = require('./api/apiKeys'),
+    Async      = require('async'),
     app      = express();
 
 
@@ -38,43 +39,43 @@ var tone_analyzer = new ToneAnalyzerV3({
 //========Call API's=======
 app.post('/searchKeyword', function(req, res){
   var keyword = req.body.keyword;
+  var highestTone = [];
 
 
   client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=100`, function(error, tweets, response) {
-    var highestTone = [];
 
     if(error) {
       console.log(error);
     } else {
-      tweets.statuses.forEach(function(tweet){
 
-        tone_analyzer.tone({ text: tweet.text },
-         function(err, tone) {
-          if (err){
-           console.log(err);
-          } else{
-          //console.log(JSON.stringify(tone, null, 2));
 
-          var tone = tone.document_tone.tone_categories[0].tones;
-
-          highestTone.push([tweet.text,
-           tone.reduce(function(tone1, tone2){
-           if(tone1.score > tone2.score){
-            return tone1;
-           } else {
-           return tone2;
+        Async.each(tweets.statuses, function(tweet, callback){
+          tone_analyzer.tone({ text: tweet.text},
+          function(err, tone){
+            if(err){
+              console.log(err);
+            } else {
+               var tone = tone.document_tone.tone_categories[0].tones;
+               highestTone.push([tweet.text,
+                   tone.reduce(function(tone1, tone2){
+                   if(tone1.score > tone2.score){
+                    return tone1;
+                   } else {
+                   return tone2;
+                  }
+               }), tweet.user.name]);
+               callback();
+            }
+          });
+        }, function(err){
+          if(err){
+            console.log(err);
+          } else {
+            console.log(highestTone);
+            res.render('test', {highestTone: highestTone});
           }
-       })]);
-
-           }
-         });
-      }); //===== End Looping through each tweet //
-    }
-
-    console.log(highestTone);
-    setTimeout(function(){
-        res.render('test', {highestTone: highestTone});
-    }, 2000);
+        });
+      }
 
   }); // end Twitter Call
 });
