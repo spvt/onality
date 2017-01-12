@@ -133,6 +133,7 @@ app.post('/searchKeyword', function(req, res){
       }
 
   }); // end Twitter Call
+});
 
 });
 
