@@ -8,7 +8,6 @@ var express  = require('express'),
     Async      = require('async'),
     app      = express();
 
-
 //========SET VIEW ENGINE=======
 app.set('view engine', 'ejs');
 
@@ -17,7 +16,6 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}) )
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
-
 
 //========GET REQUEST FOR HOMEPAGE=======
 app.get('/', function(req, res) {
@@ -38,7 +36,6 @@ var tone_analyzer = new ToneAnalyzerV3({
   password: keys.watsonPass,
   version_date: '2016-05-19'
 });
-
 
 //========Helper functions=======
 // var getHighestToneScore = function(tones) {
@@ -78,64 +75,57 @@ var tone_analyzer = new ToneAnalyzerV3({
 app.post('/searchKeyword', function(req, res){
   var keyword = req.body.keyword;
 
-
-
   client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=100`, function(error, tweets, response) {
     var highestTone = [];
-    var emotionObj         = {
+    var emotionObj  = {
       Sadness : 0,
       Anger   : 0,
       Disgust : 0,
       Fear    : 0,
       Joy     : 0
-    }
+    };
 
     if(error) {
       console.log(error);
     } else {
-
-
-        Async.each(tweets.statuses, function(tweet, callback){
-          tone_analyzer.tone({ text: tweet.text},
-          function(err, tone){
-            if(err){
-              console.log(err);
-            } else {
-               var tone = tone.document_tone.tone_categories[0].tones;
-               var singleTone = tone.reduce(function(tone1, tone2){
-                return tone1.score > tone2.score ? tone1 : tone2;
-               });
-               //console.log(singleTone.tone_name);
-              //  highestTone.push([tweet.text,
-              //      tone.reduce(function(tone1, tone2){
-              //      if(tone1.score > tone2.score){
-              //       return tone1;
-              //      } else {
-              //      return tone2;
-              //     }
-              //  }), tweet.user.name]);
-              if(!emotionObj[singleTone.tone_name]){
-                emotionObj[singleTone.tone_name] = 1;
-              } else {
-                emotionObj[singleTone.tone_name] ++;
-              }
-               callback();
-            }
-          });
-        }, function(err){
+      Async.each(tweets.statuses, function(tweet, callback){
+        tone_analyzer.tone({ text: tweet.text},
+        function(err, tone){
           if(err){
             console.log(err);
           } else {
-            //res.send('Success');
-            res.render('test', {emotionObj: emotionObj, keyword : keyword});
+            var tone = tone.document_tone.tone_categories[0].tones;
+            var singleTone = tone.reduce(function(tone1, tone2){
+              return tone1.score > tone2.score ? tone1 : tone2;
+            });
+             //console.log(singleTone.tone_name);
+            //  highestTone.push([tweet.text,
+            //      tone.reduce(function(tone1, tone2){
+            //      if(tone1.score > tone2.score){
+            //       return tone1;
+            //      } else {
+            //      return tone2;
+            //     }
+            //  }), tweet.user.name]);
+            if(!emotionObj[singleTone.tone_name]){
+              emotionObj[singleTone.tone_name] = 1;
+            } else {
+              emotionObj[singleTone.tone_name] ++;
+            }
+             callback();
           }
         });
-      }
-
+      }, function(err){
+        if(err){
+          console.log(err);
+        } else {
+          //res.send('Success');
+          res.render('test', {emotionObj: emotionObj, keyword : keyword});
+        }
+      });
+    }
   }); // end Twitter Call
-});
-
-});
+}); // end post Call
 
 app.listen('5000', function(){
   console.log('Running');
