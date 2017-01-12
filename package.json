@@ -17,7 +17,10 @@
   },
   "homepage": "https://github.com/Bigghead/tone-analyzer#readme",
   "dependencies": {
+<<<<<<< dd2cb18d314a341c9499c129b4113a0fbd63b066
     "async": "^2.1.4",
+=======
+>>>>>>> Render UI, styling, and helper functions
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.2",
     "ejs": "^2.5.5",
