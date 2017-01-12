@@ -41,39 +41,39 @@ var tone_analyzer = new ToneAnalyzerV3({
 
 
 //========Helper functions=======
-var getHighestToneScore = function(tones) {
-  var emotionTones = tones.document_tone.tone_categories[0].tones;
-  return emotionTones.reduce(function(tone1, tone2) {
-    return tone1.score > tone2.score ? tone1 : tone2;
-  });
-}
-
-var getTextTweets = function(arrayOfTweets) {
-  return arrayOfTweets.statuses.map(function(tweetData) {
-    return tweetData.text;
-  });
-}
-
-var arrayOfTweets = function(messages) {
-  return messages.map(function(messagesArray) {
-    return messagesArray.text;
-  });
-}
-
-var getToneData = function(scoreData) {
-  console.log("Score Data from getToneData:", scoreData);
-  return scoreData;
-}
+// var getHighestToneScore = function(tones) {
+//   var emotionTones = tones.document_tone.tone_categories[0].tones;
+//   return emotionTones.reduce(function(tone1, tone2) {
+//     return tone1.score > tone2.score ? tone1 : tone2;
+//   });
+// }
+//
+// var getTextTweets = function(arrayOfTweets) {
+//   return arrayOfTweets.statuses.map(function(tweetData) {
+//     return tweetData.text;
+//   });
+// }
+//
+// var arrayOfTweets = function(messages) {
+//   return messages.map(function(messagesArray) {
+//     return messagesArray.text;
+//   });
+// }
+//
+// var getToneData = function(scoreData) {
+//   console.log("Score Data from getToneData:", scoreData);
+//   return scoreData;
+// }
 
 //========Call API's=======
-var getTweetData = function(keyword) {
-  return new Promise(function(resolve, reject) {
-    client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=10`, function(error, tweets, response) {
-      if(error) console.log(error);
-      resolve(tweets);
-    });
-  });
-};
+// var getTweetData = function(keyword) {
+//   return new Promise(function(resolve, reject) {
+//     client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=10`, function(error, tweets, response) {
+//       if(error) console.log(error);
+//       resolve(tweets);
+//     });
+//   });
+// };
 
 app.post('/searchKeyword', function(req, res){
   var keyword = req.body.keyword;

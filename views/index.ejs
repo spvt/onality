@@ -11,8 +11,8 @@
       <div class="row center">
         <form method="post" action="/searchKeyword">
           <label for="keyword"></label>
-          <input type="text" id="keyword" name="keyword" class="usertext" placeholder="What would you like to know?"></input>
-          <a href="" id="download-button" class="btn-large waves-effect waves-light orange">Get Started</a>
+          <input type="text" id="keyword" name="keyword" class="usertext" placeholder="What would you like to know?" autofocus></input>
+          <button id="download-button" type='submit' class="btn-large waves-effect waves-light orange">Get Started</button>
         </form>
       </div>
       <br><br>
@@ -61,45 +61,4 @@
     </div>
   </div>
 
-  <footer class="page-footer orange">
-    <div class="container">
-      <div class="row">
-        <div class="col l6 s12">
-          <h5 class="white-text">Company Bio</h5>
-          <p class="grey-text text-lighten-4">We are a team of two web developers who welcomes any support and continue development on this project.</p>
-
-
-        </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Settings</h5>
-          <ul>
-            <li><a class="white-text" href="#!">Link 1</a></li>
-            <li><a class="white-text" href="#!">Link 2</a></li>
-            <li><a class="white-text" href="#!">Link 3</a></li>
-            <li><a class="white-text" href="#!">Link 4</a></li>
-          </ul>
-        </div>
-        <div class="col l3 s12">
-          <h5 class="white-text">Connect</h5>
-          <ul>
-            <li><a class="white-text" href="#!">Link 1</a></li>
-            <li><a class="white-text" href="#!">Link 2</a></li>
-            <li><a class="white-text" href="#!">Link 3</a></li>
-            <li><a class="white-text" href="#!">Link 4</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright">
-
-    </div>
-  </footer>
-
-
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="../../bin/materialize.js"></script>
-  <script src="app.js"></script>
-
-  </body>
-</html>
+  <% include partials/footer %>
