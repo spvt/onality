@@ -11,11 +11,13 @@ var express  = require('express'),
 
 //========SET VIEW ENGINE=======
 app.set('view engine', 'ejs');
+
 // urlencoded tells bodyParser to extract data from form element
 // middleware to read JSON data
 app.use(bodyParser.urlencoded({extended: true}) )
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
+
 
 //========GET REQUEST FOR HOMEPAGE=======
 app.get('/', function(req, res) {
@@ -36,6 +38,7 @@ var tone_analyzer = new ToneAnalyzerV3({
   password: keys.watsonPass,
   version_date: '2016-05-19'
 });
+
 
 //========Helper functions=======
 var getHighestToneScore = function(tones) {
@@ -114,21 +117,6 @@ app.post('/searchKeyword', function(req, res){
       }
 
   }); // end Twitter Call
-});
-
-
-//   getTweetData(keyword)
-//   .then(function(data) {
-//     var scoreData = arrayOfTweets(data.statuses); 
-//     // use scoreData to pass into toneAnalyzer
-//     // use toneAnalyzer to get tones
-//     // res.send data from toneAnalyzer
-//     res.send(scoreData);
-//   }).catch(function(err) {
-//     console.log(err);
-//   });
-// });
-
 
 app.listen('5000', function(){
   console.log('Running');
