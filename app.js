@@ -48,11 +48,11 @@ var tone_analyzer = new ToneAnalyzerV3({
 //   });
 // }
 //
-// var getTweets = function(arrayOfTweets) {
-//   return arrayOfTweets.map(function(tweetData) {
-//     return tweetData.text;
-//   });
-// };
+var getTweets = function(arrayOfTweets) {
+  return arrayOfTweets.map(function(tweetData) {
+    return tweetData.text;
+  });
+};
 
 
 //========Call API's=======
@@ -68,23 +68,22 @@ var tone_analyzer = new ToneAnalyzerV3({
 app.post('/searchKeyword', function(req, res){
   var keyword = req.body.keyword;
 
-
-
-  client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=3`, function(error, tweets, response) {
-    var highestTone = [];
-    var emotionObj         = {
+  client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword} AND -filter:retweets AND -filter:replies&count=100&result_type=recent`, function(error, tweets, response) {
+    var emotionObj   = {
       Sadness : 0,
       Anger   : 0,
       Disgust : 0,
       Fear    : 0,
       Joy     : 0
-    }
+    };
 
     if(error) {
       console.log(error);
     } else {
 
+
         Async.each(tweets.statuses, function(tweet, callback){
+          console.log(tweet.text);
           tone_analyzer.tone({ text: tweet.text},
           function(err, tone){
             if(err){
