@@ -48,22 +48,12 @@ var tone_analyzer = new ToneAnalyzerV3({
 //   });
 // }
 //
-// var getTextTweets = function(arrayOfTweets) {
-//   return arrayOfTweets.statuses.map(function(tweetData) {
+// var getTweets = function(arrayOfTweets) {
+//   return arrayOfTweets.map(function(tweetData) {
 //     return tweetData.text;
 //   });
-// }
-//
-// var arrayOfTweets = function(messages) {
-//   return messages.map(function(messagesArray) {
-//     return messagesArray.text;
-//   });
-// }
-//
-// var getToneData = function(scoreData) {
-//   console.log("Score Data from getToneData:", scoreData);
-//   return scoreData;
-// }
+// };
+
 
 //========Call API's=======
 // var getTweetData = function(keyword) {
@@ -80,7 +70,7 @@ app.post('/searchKeyword', function(req, res){
 
 
 
-  client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=100`, function(error, tweets, response) {
+  client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=3`, function(error, tweets, response) {
     var highestTone = [];
     var emotionObj         = {
       Sadness : 0,
@@ -94,7 +84,6 @@ app.post('/searchKeyword', function(req, res){
       console.log(error);
     } else {
 
-
         Async.each(tweets.statuses, function(tweet, callback){
           tone_analyzer.tone({ text: tweet.text},
           function(err, tone){
@@ -105,15 +94,7 @@ app.post('/searchKeyword', function(req, res){
                var singleTone = tone.reduce(function(tone1, tone2){
                 return tone1.score > tone2.score ? tone1 : tone2;
                });
-               //console.log(singleTone.tone_name);
-              //  highestTone.push([tweet.text,
-              //      tone.reduce(function(tone1, tone2){
-              //      if(tone1.score > tone2.score){
-              //       return tone1;
-              //      } else {
-              //      return tone2;
-              //     }
-              //  }), tweet.user.name]);
+
               if(!emotionObj[singleTone.tone_name]){
                 emotionObj[singleTone.tone_name] = 1;
               } else {
@@ -126,10 +107,9 @@ app.post('/searchKeyword', function(req, res){
           if(err){
             console.log(err);
           } else {
-            //res.send('Success');
             res.render('test', {emotionObj: emotionObj, keyword : keyword});
           }
-        });
+        });  //===end ASYNC Each
       }
 
   }); // end Twitter Call
