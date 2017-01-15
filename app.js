@@ -8,7 +8,7 @@ var express  = require('express'),
     Async    = require('async'),
     app      = express();
     port     = 5000;
-    
+
 //========SET VIEW ENGINE=======
 app.set('view engine', 'ejs');
 
@@ -86,11 +86,23 @@ app.post('/searchKeyword', function(req, res){
           if(err){
             console.log(err);
           } else {
-             var tone = tone.document_tone.tone_categories[0].tones;
-             var singleTone = tone.reduce(function(tone1, tone2){
+              var tone = tone.document_tone.tone_categories[0].tones;
+              var singleTone = tone.reduce(function(tone1, tone2){
               return tone1.score > tone2.score ? tone1 : tone2;
-             });
-
+              });
+            var tone = tone.document_tone.tone_categories[0].tones;
+            var singleTone = tone.reduce(function(tone1, tone2){
+              return tone1.score > tone2.score ? tone1 : tone2;
+            });
+             //console.log(singleTone.tone_name);
+            //  highestTone.push([tweet.text,
+            //      tone.reduce(function(tone1, tone2){
+            //      if(tone1.score > tone2.score){
+            //       return tone1;
+            //      } else {
+            //      return tone2;
+            //     }
+            //  }), tweet.user.name]);
             if(!emotionObj[singleTone.tone_name]){
               emotionObj[singleTone.tone_name] = 1;
             } else {
