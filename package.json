@@ -4,7 +4,7 @@
   "description": "an app that identifies emotions from key phrases from user inputs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
