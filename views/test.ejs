@@ -1,6 +1,6 @@
 
 <% include partials/header %>
-    
+
     <div class="container center-align">
       <h1>How People Feel About <%= keyword %></h1>
       <canvas id="myChart"></canvas>
@@ -16,7 +16,10 @@ var labels = [];
 var data = [];
 
 for( var key in emotionObj){
-  labels.push(key);
+  if(key === 'Joy'){
+    key = 'Happy';
+  }
+    labels.push(key);
   data.push(emotionObj[key]);
 }
 var ctx = document.getElementById("myChart");
