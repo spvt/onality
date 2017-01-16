@@ -53,8 +53,8 @@ var tone_analyzer = new ToneAnalyzerV3({
 
 app.post('/searchresults', function(req, res){
   var keyword = req.body.keyword;
-  
-  client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=100`, function(error, tweets, response) {
+
+  client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=10`, function(error, tweets, response) {
     var highestTone = [];
     var emotionObj  = {
       Sadness : 0,
@@ -62,11 +62,14 @@ app.post('/searchresults', function(req, res){
       Disgust : 0,
       Fear    : 0,
       Joy     : 0
-    };
-
+    };    
     if(error) {
       console.log(error);
     } else {
+      tweets.statuses.filter(function(tweetObj) {
+        console.log("Filter is working on:", tweetObj);
+        return helpers.isReply(tweetObj);
+      });
       Async.each(tweets.statuses, function(tweet, callback){
         console.log(tweet.text.italic);
         tone_analyzer.tone({ text: tweet.text},
