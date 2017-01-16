@@ -34,7 +34,7 @@
       <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
     </div>
 
-    <div class="col l6 s12">
+    <div class="col l6 s12" id="news">
       <h5 class="grey-text">News Headline</h5>
       <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
     </div>
@@ -42,22 +42,22 @@
 </div>
 
 <script>
-var newsData;
+var newsHeadlines;
+function printHeadlines(arr) {
+  var title = newsArray[0].source.enriched.url.title;
+  var newsBlock = document.getElementById("news");
+  newsBlock.append('<h5 class="grey-text">title</h5>');
+}
+
 function loadXMLDoc(url) {
   var xmlhttp = new XMLHttpRequest();
-
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
       if (xmlhttp.status == 200) {
-       var parsedNewsData = JSON.parse(xmlhttp.responseText);
-       console.log(parsedNewsData);
-       newsData = parsedNewsData;
-      //  console.log(newsData.articles);
-
-      // newsData.articles.forEach(function(article){
-      //    data.push(article);
-      //  });
-      }
+        var parsedNewsData = JSON.parse(xmlhttp.responseText);
+        var newsArray = parsedNewsData.result.docs;        
+        console.log(newsArray);      
+      }   
       else if (xmlhttp.status == 400) {
         alert('There was an error 400');
       }
@@ -72,5 +72,4 @@ function loadXMLDoc(url) {
 }
 loadXMLDoc('https://gateway-a.watsonplatform.net/calls/data/GetNews?outputMode=json&start=now-1d&end=now&count=5&q.enriched.url.title='+ keyword +'&return=enriched.url.url,enriched.url.title,enriched.url.text&apikey='+url);
 
-console.log(newsData);
 </script>
