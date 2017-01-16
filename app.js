@@ -4,6 +4,7 @@ var express  = require('express'),
     watson   = require('watson-developer-cloud'),
     bodyParser = require('body-parser'), // middleware to get data from forms. Express can't do this.
     ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3'),
+    alchemyDataNews = require('watson-developer-cloud/alchemy-data-news/v1'),
     keys     = require('./api/apiKeys'),
     Async    = require('async'),
     colors   = require('colors'),
@@ -40,6 +41,10 @@ var tone_analyzer = new ToneAnalyzerV3({
   version_date: '2016-05-19'
 });
 
+var alchemy_data_news = new alchemyDataNews({
+  api_key: '6c164f0588efeac988da699f5dbc55868d85a565'
+});
+
 
 //========Call API's=======
 // var getTweetData = function(keyword) {
@@ -51,10 +56,16 @@ var tone_analyzer = new ToneAnalyzerV3({
 //   });
 // };
 
+app.get('/news', function(req, res){
+res.render('test');
+});
+
 app.post('/searchresults', function(req, res){
   var keyword = req.body.keyword;
 
-  client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=10`, function(error, tweets, response) {
+
+
+  client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=100`, function(error, tweets, response) {
     var highestTone = [];
     var emotionObj  = {
       Sadness : 0,
@@ -62,7 +73,7 @@ app.post('/searchresults', function(req, res){
       Disgust : 0,
       Fear    : 0,
       Joy     : 0
-    };    
+    };
     if(error) {
       console.log(error);
     } else {
@@ -71,7 +82,7 @@ app.post('/searchresults', function(req, res){
         return helpers.isReply(tweetObj);
       });
       Async.each(tweets.statuses, function(tweet, callback){
-        console.log(tweet.text.italic);
+        console.log(tweet.text.bold);
         tone_analyzer.tone({ text: tweet.text},
         function(err, tone){
           if(err){
@@ -81,7 +92,7 @@ app.post('/searchresults', function(req, res){
             var singleTone = tone.reduce(function(tone1, tone2){
               return tone1.score > tone2.score ? tone1 : tone2;
             });
-            
+
              //console.log(singleTone.tone_name);
             //  highestTone.push([tweet.text,
             //      tone.reduce(function(tone1, tone2){
@@ -102,7 +113,7 @@ app.post('/searchresults', function(req, res){
       }, function(err){
         if(err){
           console.log(err);
-        } else {          
+        } else {
           res.render('searchresults', {emotionObj: emotionObj, keyword : keyword});
         }
       });  //===end ASYNC Each
