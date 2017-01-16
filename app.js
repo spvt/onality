@@ -77,10 +77,10 @@ app.post('/searchresults', function(req, res){
           if(err){
             console.log(err);
           } else {
-              var tone = tone.document_tone.tone_categories[0].tones;
-              var singleTone = tone.reduce(function(tone1, tone2){
-                return tone1.score > tone2.score ? tone1 : tone2;
-              });
+            var tone = tone.document_tone.tone_categories[0].tones;
+            var singleTone = tone.reduce(function(tone1, tone2){
+              return tone1.score > tone2.score ? tone1 : tone2;
+            });
             
              //console.log(singleTone.tone_name);
             //  highestTone.push([tweet.text,
@@ -94,7 +94,7 @@ app.post('/searchresults', function(req, res){
             if(!emotionObj[singleTone.tone_name]){
               emotionObj[singleTone.tone_name] = 1;
             } else {
-              emotionObj[singleTone.tone_name] ++;
+              emotionObj[singleTone.tone_name]++;
             }
             callback();
           }
