@@ -41,3 +41,37 @@
     </div>
   </div>
 </div>
+
+<script>
+var newsData;
+function loadXMLDoc(url) {
+  var xmlhttp = new XMLHttpRequest();
+
+  xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+      if (xmlhttp.status == 200) {
+       var parsedNewsData = JSON.parse(xmlhttp.responseText);
+       console.log(parsedNewsData);
+       newsData = parsedNewsData;
+      //  console.log(newsData.articles);
+
+      // newsData.articles.forEach(function(article){
+      //    data.push(article);
+      //  });
+      }
+      else if (xmlhttp.status == 400) {
+        alert('There was an error 400');
+      }
+      else {
+         alert('something else other than 200 was returned');
+      }
+    }
+  };
+
+  xmlhttp.open("GET", url, true);
+  xmlhttp.send();
+}
+loadXMLDoc('https://gateway-a.watsonplatform.net/calls/data/GetNews?outputMode=json&start=now-1d&end=now&count=5&q.enriched.url.title='+ keyword +'&return=enriched.url.url,enriched.url.title,enriched.url.text&apikey=url');
+
+console.log(newsData);
+</script>

@@ -112,7 +112,7 @@ app.post('/searchresults', function(req, res){
         if(err){
           console.log(err);
         } else {
-          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword});
+          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: keys.alchemyApi2});
         }
       });  //===end ASYNC Each
     }
