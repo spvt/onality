@@ -1,0 +1,43 @@
+
+<div class="container">
+  <% emotionObj %>
+  <% var noun = ""; %>
+  <% var score = 0; %>
+  <% for (var tone in emotionObj) {
+      if (emotionObj[tone] > score) {
+        noun = tone;
+        score = emotionObj[tone];
+      }
+    } %>
+  <% noun = noun.toLowerCase(); %>
+    
+  <h5 class="grey-text">The following articles may help you understand why people are feeling <%= noun %></h5>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col l6 s12">
+      <h5 class="grey-text">News Headline</h5>
+      <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
+    </div>
+
+    <div class="col l6 s12">
+      <h5 class="grey-text">News Headline</h5>
+      <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col l6 s12">
+      <h5 class="grey-text">News Headline</h5>
+      <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
+    </div>
+
+    <div class="col l6 s12">
+      <h5 class="grey-text">News Headline</h5>
+      <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
+    </div>
+  </div>
+</div>

@@ -62,9 +62,6 @@ res.render('test');
 
 app.post('/searchresults', function(req, res){
   var keyword = req.body.keyword;
-
-
-
   client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=100`, function(error, tweets, response) {
     var highestTone = [];
     var emotionObj  = {
@@ -78,11 +75,12 @@ app.post('/searchresults', function(req, res){
       console.log(error);
     } else {
       tweets.statuses.filter(function(tweetObj) {
-        console.log("Filter is working on:", tweetObj);
+        // console.log("Filter is working on:", tweetObj);
         return helpers.isReply(tweetObj);
       });
       Async.each(tweets.statuses, function(tweet, callback){
         console.log(tweet.text.bold);
+        // console.log(tweet.text.italic);
         tone_analyzer.tone({ text: tweet.text},
         function(err, tone){
           if(err){
