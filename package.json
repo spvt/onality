@@ -4,7 +4,7 @@
   "description": "an app that identifies emotions from key phrases from user inputs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -21,8 +21,10 @@
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.2",
     "chart.js": "^2.4.0",
+    "colors": "^1.1.2",
     "ejs": "^2.5.5",
     "express": "^4.14.0",
+    "jquery": "^3.1.1",
     "twitter": "^1.7.0",
     "watson-developer-cloud": "^2.14.5"
   }
