@@ -12,6 +12,8 @@ var express  = require('express'),
     app      = express();
     port     = 5000;
 
+
+console.log(keys.alchemyAPI2);
 //========SET VIEW ENGINE=======
 app.set('view engine', 'ejs');
 
@@ -112,7 +114,7 @@ app.post('/searchresults', function(req, res){
         if(err){
           console.log(err);
         } else {
-          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: keys.alchemyApi2});
+          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: keys.alchemyAPI2});
         }
       });  //===end ASYNC Each
     }

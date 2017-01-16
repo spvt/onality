@@ -11,8 +11,7 @@
     } %>
   <% noun = noun.toLowerCase(); %>
 
-  <% var url = url ;%>
-  <% console.log(url); %>
+
 
 
   <h5 class="grey-text">The following articles may help you understand why people are feeling <%= noun %></h5>
@@ -46,7 +45,6 @@
   </div>
 </div>
 
-<<<<<<< dc7dbb7a403421e3a4533ef5f032262d77166d9a
 <script>
 var newsData;
 function loadXMLDoc(url) {
@@ -76,7 +74,7 @@ function loadXMLDoc(url) {
   xmlhttp.open("GET", url, true);
   xmlhttp.send();
 }
-loadXMLDoc('https://gateway-a.watsonplatform.net/calls/data/GetNews?outputMode=json&start=now-1d&end=now&count=5&q.enriched.url.title='+ keyword +'&return=enriched.url.url,enriched.url.title,enriched.url.text&apikey=url');
+loadXMLDoc('https://gateway-a.watsonplatform.net/calls/data/GetNews?outputMode=json&start=now-1d&end=now&count=5&q.enriched.url.title='+ keyword +'&return=enriched.url.url,enriched.url.title,enriched.url.text&apikey=' + url);
 
-console.log(newsData);
+//console.log(newsData);
 </script>
