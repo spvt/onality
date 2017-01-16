@@ -21,6 +21,7 @@
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.2",
     "chart.js": "^2.4.0",
+    "colors": "^1.1.2",
     "ejs": "^2.5.5",
     "express": "^4.14.0",
     "twitter": "^1.7.0",

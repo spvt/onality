@@ -6,6 +6,7 @@ var express  = require('express'),
     ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3'),
     keys     = require('./api/apiKeys'),
     Async    = require('async'),
+    colors    = require('colors'),
     app      = express();
     port     = 5000;
 
@@ -80,7 +81,7 @@ app.post('/searchKeyword', function(req, res){
       console.log(error);
     } else {
       Async.each(tweets.statuses, function(tweet, callback){
-        console.log(tweet.text);
+        console.log(tweet.text.italic.bold);
         tone_analyzer.tone({ text: tweet.text},
         function(err, tone){
           if(err){
@@ -88,12 +89,9 @@ app.post('/searchKeyword', function(req, res){
           } else {
               var tone = tone.document_tone.tone_categories[0].tones;
               var singleTone = tone.reduce(function(tone1, tone2){
-              return tone1.score > tone2.score ? tone1 : tone2;
+                return tone1.score > tone2.score ? tone1 : tone2;
               });
-            var tone = tone.document_tone.tone_categories[0].tones;
-            var singleTone = tone.reduce(function(tone1, tone2){
-              return tone1.score > tone2.score ? tone1 : tone2;
-            });
+            
              //console.log(singleTone.tone_name);
             //  highestTone.push([tweet.text,
             //      tone.reduce(function(tone1, tone2){
