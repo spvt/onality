@@ -10,7 +10,7 @@ var express  = require('express'),
     colors   = require('colors'),
     helpers  = require('./scripts/helpers');
     app      = express();
-    port     = 5000;
+    port     = process.env.PORT || 5000;
 
 //========SET VIEW ENGINE=======
 app.set('view engine', 'ejs');
@@ -28,21 +28,17 @@ app.get('/', function(req, res) {
 
 //============Twitter===========
 var client = new Twitter({
-  consumer_key: keys.twitterKey,
-  consumer_secret: keys.twitterSecret,
-  access_token_key: keys.twitterToken,
-  access_token_secret: keys.twitterTokenSecret
+  consumer_key: twitterKey|| keys.twitterKey,
+  consumer_secret: twitterSecret || keys.twitterSecret,
+  access_token_key: twitterToken|| keys.twitterToken,
+  access_token_secret: twitterTokenSecret || keys.twitterTokenSecret
 });
 
 //========Watson Tone Analyzer=======
 var tone_analyzer = new ToneAnalyzerV3({
-  username: keys.watsonUsername,
-  password: keys.watsonPass,
+  username: watsonUsername || keys.watsonUsername,
+  password: watsonPass || keys.watsonPass,
   version_date: '2016-05-19'
-});
-
-var alchemy_data_news = new alchemyDataNews({
-  api_key: '6c164f0588efeac988da699f5dbc55868d85a565'
 });
 
 
@@ -111,7 +107,7 @@ app.post('/searchresults', function(req, res){
         if(err){
           console.log(err);
         } else {
-          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: keys.alchemyAPI2});
+          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: alchemyAPI2 || keys.alchemyAPI2});
         }
       });  //===end ASYNC Each
     }
