@@ -1,5 +1,5 @@
 <% include partials/header %>
-<% var keyword = keyword ; %>
+
 <div class="container center-align">
   <h2 class="center orange-text">How People Feel About <%= keyword %></h2>
   <canvas id="myChart"></canvas>
@@ -18,7 +18,8 @@
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js'></script>
 
 <script>
-var url = url;
+var url = <%- JSON.stringify(url) %>;
+var keyword = <%- JSON.stringify(keyword) %>;
 var emotionObj = <%- JSON.stringify(emotionObj) %>;
 var labels = [];
 var data = [];
@@ -55,12 +56,6 @@ var myChart = new Chart(ctx, {
     }]
   }
 });
-</script>
-
-<script type="text/javascript">
-
-var keyword = <%- JSON.stringify(keyword) %>;
-
 </script>
 
 <% include partials/news %>

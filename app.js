@@ -79,8 +79,7 @@ app.post('/searchresults', function(req, res){
         return helpers.isReply(tweetObj);
       });
       Async.each(tweets.statuses, function(tweet, callback){
-        console.log(tweet.text.bold);
-        // console.log(tweet.text.italic);
+        console.log(tweet.text.bold);        
         tone_analyzer.tone({ text: tweet.text},
         function(err, tone){
           if(err){
@@ -112,7 +111,7 @@ app.post('/searchresults', function(req, res){
         if(err){
           console.log(err);
         } else {
-          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: keys.alchemyApi2});
+          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: keys.alchemyAPI2});
         }
       });  //===end ASYNC Each
     }
