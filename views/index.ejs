@@ -3,19 +3,20 @@
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
       <br><br>
-      <h1 class="header center orange-text">Tone Analyzer</h1>
+      <h1 class="center orange-text">Tone Analyzer</h1>
       <div class="row center">
         <h5 class="header col s12 light">Learn how the Twitterverse feels about your topic.</h5>
       </div>
       <!-- Input Text Area -->
       <div class="row center">
-        <form method="post" action="/searchKeyword">
+        <form method="post" action="/searchresults">
           <label for="keyword"></label>
           <input type="text" id="keyword" name="keyword" class="usertext" placeholder="What would you like to know?" autofocus></input>
-          <button id="download-button" type='submit' class="btn-large waves-effect waves-light orange">Get Started</button>
+          <button id="download-button" type='submit' class="btn-large waves-effect waves-light orange loading">Get Started</button>
         </form>
       </div>
       <br><br>
+      
     </div>
   </div>
 
@@ -56,9 +57,7 @@
     </div>
     <br><br>
 
-    <div class="section">
-
-    </div>
+    <div class="section"></div>
   </div>
 
   <% include partials/footer %>
