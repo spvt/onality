@@ -81,8 +81,7 @@ app.post('/searchresults', function(req, res){
         return helpers.isReply(tweetObj);
       });
       Async.each(tweets.statuses, function(tweet, callback){
-        console.log(tweet.text.bold);
-        // console.log(tweet.text.italic);
+        console.log(tweet.text.bold);        
         tone_analyzer.tone({ text: tweet.text},
         function(err, tone){
           if(err){
