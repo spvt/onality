@@ -6,6 +6,20 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: 'Raleway', sans-serif;
 }
 
-.usertext {
+.usertext, .subheading {
 	text-align: center;
+}
+
+.social {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.socialicons {
+	margin: 0 10px;
+}
+
+.spacing {
+	margin: 30px 0;
 }

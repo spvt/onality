@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "an app that identifies emotions from key phrases from user inputs",
   "main": "index.js",
+  "engines": {
+    "node": "6.6.0",
+    "npm": "3.10.8"
+  },
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
