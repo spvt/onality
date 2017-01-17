@@ -29,15 +29,15 @@ app.get('/', function(req, res) {
 //============Twitter===========
 var client = new Twitter({
   consumer_key: process.env.twitterKey || keys.twitterKey,
-  consumer_secret: twitterSecret || keys.twitterSecret,
-  access_token_key: twitterToken || keys.twitterToken,
-  access_token_secret: twitterTokenSecret || keys.twitterTokenSecret
+  consumer_secret: process.env.twitterSecret || keys.twitterSecret,
+  access_token_key: process.env.twitterToken || keys.twitterToken,
+  access_token_secret: process.env.twitterTokenSecret || keys.twitterTokenSecret
 });
 
 //========Watson Tone Analyzer=======
 var tone_analyzer = new ToneAnalyzerV3({
-  username: watsonUsername || keys.watsonUsername,
-  password: watsonPass || keys.watsonPass,
+  username: process.env.watsonUsername || keys.watsonUsername,
+  password: process.env.watsonPass || keys.watsonPass,
   version_date: '2016-05-19'
 });
 
@@ -107,7 +107,7 @@ app.post('/searchresults', function(req, res){
         if(err){
           console.log(err);
         } else {
-          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: alchemyAPI2 || keys.alchemyAPI2});
+          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: process.env.alchemyAPI2 || keys.alchemyAPI2});
         }
       });  //===end ASYNC Each
     }
