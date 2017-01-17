@@ -5,7 +5,7 @@ var express  = require('express'),
     bodyParser = require('body-parser'), // middleware to get data from forms. Express can't do this.
     ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3'),
     alchemyDataNews = require('watson-developer-cloud/alchemy-data-news/v1'),    
-    // keys     = require('./api/apiKeys'),
+    keys     = require('./api/apiKeys'),
     Async    = require('async'),
     colors   = require('colors'),
     helpers  = require('./scripts/helpers');
@@ -75,7 +75,7 @@ app.post('/searchresults', function(req, res){
         return helpers.isReply(tweetObj);
       });
       Async.each(tweets.statuses, function(tweet, callback){
-        console.log(tweet.text.bold);        
+        // console.log(tweet.text.bold);        
         tone_analyzer.tone({ text: tweet.text},
         function(err, tone){
           if(err){
