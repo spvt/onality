@@ -42,9 +42,7 @@ var tone_analyzer = new ToneAnalyzerV3({
   version_date: '2016-05-19'
 });
 
-var alchemy_data_news = new alchemyDataNews({
-  api_key: '6c164f0588efeac988da699f5dbc55868d85a565'
-});
+
 
 
 //========Call API's=======
