@@ -4,13 +4,13 @@ var express  = require('express'),
     watson   = require('watson-developer-cloud'),
     bodyParser = require('body-parser'), // middleware to get data from forms. Express can't do this.
     ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3'),
-    alchemyDataNews = require('watson-developer-cloud/alchemy-data-news/v1'),
+    alchemyDataNews = require('watson-developer-cloud/alchemy-data-news/v1'),    
     keys     = require('./api/apiKeys'),
     Async    = require('async'),
     colors   = require('colors'),
     helpers  = require('./scripts/helpers');
     app      = express();
-    port     = 5000;
+    port     = process.env.PORT || 5000;
 
 //========SET VIEW ENGINE=======
 app.set('view engine', 'ejs');
@@ -28,21 +28,17 @@ app.get('/', function(req, res) {
 
 //============Twitter===========
 var client = new Twitter({
-  consumer_key: keys.twitterKey,
-  consumer_secret: keys.twitterSecret,
-  access_token_key: keys.twitterToken,
-  access_token_secret: keys.twitterTokenSecret
+  consumer_key: process.env.twitterKey || keys.twitterKey,
+  consumer_secret: process.env.twitterSecret || keys.twitterSecret,
+  access_token_key: process.env.twitterToken || keys.twitterToken,
+  access_token_secret: process.env.twitterTokenSecret || keys.twitterTokenSecret
 });
 
 //========Watson Tone Analyzer=======
 var tone_analyzer = new ToneAnalyzerV3({
-  username: keys.watsonUsername,
-  password: keys.watsonPass,
+  username: process.env.watsonUsername || keys.watsonUsername,
+  password: process.env.watsonPass || keys.watsonPass,
   version_date: '2016-05-19'
-});
-
-var alchemy_data_news = new alchemyDataNews({
-  api_key: '6c164f0588efeac988da699f5dbc55868d85a565'
 });
 
 
@@ -79,7 +75,7 @@ app.post('/searchresults', function(req, res){
         return helpers.isReply(tweetObj);
       });
       Async.each(tweets.statuses, function(tweet, callback){
-        console.log(tweet.text.bold);        
+        // console.log(tweet.text.bold);        
         tone_analyzer.tone({ text: tweet.text},
         function(err, tone){
           if(err){
@@ -111,7 +107,7 @@ app.post('/searchresults', function(req, res){
         if(err){
           console.log(err);
         } else {
-          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: keys.alchemyAPI2});
+          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: process.env.alchemyAPI2 || keys.alchemyAPI2});
         }
       });  //===end ASYNC Each
     }

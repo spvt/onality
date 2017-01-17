@@ -10,12 +10,15 @@
       }
     } %>
   <% noun = noun.toLowerCase(); %>
-  <h5 class="grey-text">The following articles may help you understand why people are feeling <%= noun %></h5>
+  <h4 class="grey-text subheading">The following articles may help you understand why people are feeling <%= noun %> about <%= keyword %></h4>
+</div>
+
+<div class="container spacing">
 </div>
 
 <div class="container">
   <div class="row">
-    <div class="col l6 s12">
+    <div class="col l6 s12" id="news">
       <h5 class="grey-text">News Headline</h5>
       <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
     </div>
@@ -39,25 +42,33 @@
       <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
     </div>
   </div>
+</div>
+
+<div class="container spacing">
 </div>
 
 <script>
-var newsData;
+
 function loadXMLDoc(url) {
   var xmlhttp = new XMLHttpRequest();
-
   xmlhttp.onreadystatechange = function() {
     if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
       if (xmlhttp.status == 200) {
-       var parsedNewsData = JSON.parse(xmlhttp.responseText);
-       console.log(parsedNewsData);
-       newsData = parsedNewsData;
-      //  console.log(newsData.articles);
+        var parsedNewsData = JSON.parse(xmlhttp.responseText);
 
-      // newsData.articles.forEach(function(article){
-      //    data.push(article);
-      //  });
-      }
+        console.log(xmlhttp.responseText);
+
+
+        var newsArray = parsedNewsData.result.docs; 
+        var title = newsArray[0].source.enriched.url.title;
+        var newsBlock = document.getElementById("news");
+        var headingElement = document.createElement('h5');
+        headingElement.className = "grey-text";
+        var headingText = document.createTextNode(title);
+        headingElement.append(headingText);
+        newsBlock.prepend(headingElement);       
+        
+      }   
       else if (xmlhttp.status == 400) {
         alert('There was an error 400');
       }
@@ -70,7 +81,7 @@ function loadXMLDoc(url) {
   xmlhttp.open("GET", url, true);
   xmlhttp.send();
 }
-loadXMLDoc('https://gateway-a.watsonplatform.net/calls/data/GetNews?outputMode=json&start=now-1d&end=now&count=5&q.enriched.url.title='+ keyword +'&return=enriched.url.url,enriched.url.title,enriched.url.text&apikey='+url);
 
-console.log(newsData);
+loadXMLDoc('https://gateway-a.watsonplatform.net/calls/data/GetNews?outputMode=json&start=now-1d&end=now&count=5&q.enriched.url.title='+keyword+'&return=enriched.url.url,enriched.url.title,enriched.url.text&apikey='+url);
+
 </script>
