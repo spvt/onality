@@ -10,8 +10,6 @@
       }
     } %>
   <% noun = noun.toLowerCase(); %>
-
-  <h5 class="grey-text">The following articles may help you understand why people are feeling <%= noun %></h5>
   <h4 class="grey-text subheading">The following articles may help you understand why people are feeling <%= noun %> about <%= keyword %></h4>
 </div>
 
@@ -19,20 +17,12 @@
 </div>
 
 <div class="container">
-  <div class="row">
-    <div class="col l6 s12" id="news">
-      <h5 class="grey-text">News Headline</h5>
-      <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
-    </div>
+  <div class="row" id="news">
 
-    <div class="col l6 s12">
-      <h5 class="grey-text">News Headline</h5>
-      <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
-    </div>
   </div>
 </div>
 
-<div class="container">
+<%# <div class="container">
   <div class="row">
     <div class="col l6 s12">
       <h5 class="grey-text">News Headline</h5>
@@ -44,46 +34,75 @@
       <p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>
     </div>
   </div>
-</div>
+</div>%>
 
 <div class="container spacing">
 </div>
 
+
+
 <script>
 
-function loadXMLDoc(url) {
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = function() {
-    if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
-      if (xmlhttp.status == 200) {
-        var parsedNewsData = JSON.parse(xmlhttp.responseText);
+var storedData = JSON.parse(localStorage.getItem('data'));
+//storedData is the Watson News Data
 
-        console.log(xmlhttp.responseText);
+var newsArray = storedData.result.docs;
+var newsBlock = document.getElementById("news");
+newsArray.forEach(function(news){
+  var heading = document.createElement('div');
+  heading.className = 'col l6 s12';
+  heading.innerHTML = '<h5 class="grey-text">' +news.source.enriched.url.title+'</h5><p class="grey-text text-lighten-4">'+ news.source.enriched.url.text +'</p>';
+
+  newsBlock.appendChild(heading);
+});
 
 
-        var newsArray = parsedNewsData.result.docs;
-        var title = newsArray[0].source.enriched.url.title;
-        var newsBlock = document.getElementById("news");
-        var headingElement = document.createElement('h5');
-        headingElement.className = "grey-text";
-        var headingText = document.createTextNode(title);
-        headingElement.append(headingText);
-        newsBlock.prepend(headingElement);
-
-      }
-      else if (xmlhttp.status == 400) {
-        alert('There was an error 400');
-      }
-      else {
-         alert('something else other than 200 was returned');
-      }
-    }
-  };
-
-  xmlhttp.open("GET", url, true);
-  xmlhttp.send();
-}
-loadXMLDoc('https://gateway-a.watsonplatform.net/calls/data/GetNews?outputMode=json&start=now-1d&end=now&count=5&q.enriched.url.title='+ keyword +'&return=enriched.url.url,enriched.url.title,enriched.url.text&apikey=' + url);
+// function loadXMLDoc(url) {
+//   var xmlhttp = new XMLHttpRequest();
+//   xmlhttp.onreadystatechange = function() {
+//     if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+//       if (xmlhttp.status == 200) {
+//         var parsedNewsData = JSON.parse(xmlhttp.responseText);
+//
+//         console.log(parsedNewsData);
+//
+//         var newsData = [];
+//
+//
+//         var newsArray = parsedNewsData.result.docs;
+//         // var title = newsArray[0].source.enriched.url.title;
+//         var newsBlock = document.getElementById("news");
+//         //var headingElement = document.createElement('h5');
+//         // headingElement.className = "grey-text";
+//         // var headingText = document.createTextNode(title);
+//         // headingElement.appendChild(headingText);
+//         // newsBlock.prepend(headingElement);
+//
+//         newsArray.forEach(function(news){
+//           //newsData.push(news.source.enriched.url);
+//           var heading = document.createElement('div');
+//           heading.className = 'col l6 s12';
+//           heading.innerHTML = '<h5 class="grey-text">' +news.source.enriched.url.title+'</h5>';
+//           heading += '<p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>';
+//           console.log(heading);
+//           newsBlock.appendChild(heading);
+//         });
+//         //console.log(newsData);
+//
+//       }
+//       else if (xmlhttp.status == 400) {
+//         alert('There was an error 400');
+//       }
+//       else {
+//          alert('something else other than 200 was returned');
+//       }
+//     }
+//   };
+//
+//   xmlhttp.open("GET", url, true);
+//   xmlhttp.send();
+// }
+//loadXMLDoc('https://gateway-a.watsonplatform.net/calls/data/GetNews?outputMode=json&start=now-3d&end=now&count=5&q.enriched.url.title='+ keyword +'&return=enriched.url.url,enriched.url.title,enriched.url.text&apikey=' + url);
 
 
 //console.log(newsData);
