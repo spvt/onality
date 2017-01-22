@@ -7,7 +7,8 @@ var keys = {
 	watsonPass     : 'HiYiMMo2ZQgk',
 	newsApi: 'e4c0615e8a604f6a9ccf351ee09621b4',
 	alchemyAPI: "6c164f0588efeac988da699f5dbc55868d85a565",
-	alchemyAPI2: "6762c1f24cb33195e2811cad3dd6b0cdd3f140d3"
+	alchemyAPI2: "6762c1f24cb33195e2811cad3dd6b0cdd3f140d3",
+	bing: "ffa7cbdffb654e1d9bbb4d086e70bf30"
 }
 
 module.exports = keys;

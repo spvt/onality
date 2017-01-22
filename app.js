@@ -2,6 +2,7 @@ var express  = require('express'),
     Twitter  = require('twitter'),
     Promise  = require('bluebird'),
     watson   = require('watson-developer-cloud'),
+    request  = require('request');
     bodyParser = require('body-parser'), // middleware to get data from forms. Express can't do this.
     ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3'),
     alchemyDataNews = require('watson-developer-cloud/alchemy-data-news/v1'),
@@ -60,6 +61,8 @@ res.render('test');
 
 app.post('/searchresults', function(req, res){
   var keyword = req.body.keyword;
+
+  //========Call Twitter for real time opinions on search terms=======
   client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=100`, function(error, tweets, response) {
     var highestTone = [];
     var emotionObj  = {
@@ -69,13 +72,16 @@ app.post('/searchresults', function(req, res){
       Fear    : 0,
       Joy     : 0
     };
+    var relatedTerms = [];
     if(error) {
       console.log(error);
     } else {
       tweets.statuses.filter(function(tweetObj) {
         // console.log("Filter is working on:", tweetObj);
         return helpers.isReply(tweetObj);
-      });
+      });    
+
+      //========Call Watson to get sentiments of Twitter data=======
       Async.each(tweets.statuses, function(tweet, callback){
         // console.log(tweet.text.bold);
         tone_analyzer.tone({ text: tweet.text},
@@ -83,6 +89,23 @@ app.post('/searchresults', function(req, res){
           if(err){
             console.log(err);
           } else {
+            //========Call Bing for related search terms=======
+            var bingUrl = `https://api.cognitive.microsoft.com/bing/v5.0/search?q=${keyword}`;    
+            var options = {
+              url: bingUrl,
+              method: 'GET',
+              headers: {
+                'Ocp-Apim-Subscription-Key': process.env.bing || keys.bing
+              }
+            };
+            
+            request(options, function (error, response, body) {
+              var jsonData = JSON.parse(body);    
+              if (!error && response.statusCode === 200) {  
+                relatedTerms.push(jsonData.relatedSearches.value);
+              }
+            });            
+
             var tone = tone.document_tone.tone_categories[0].tones;
             var singleTone = tone.reduce(function(tone1, tone2){
               return tone1.score > tone2.score ? tone1 : tone2;
@@ -109,7 +132,8 @@ app.post('/searchresults', function(req, res){
         if(err){
           console.log(err);
         } else {
-          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, url: process.env.alchemyAPI2 || keys.alchemyAPI2});
+          // console.log("Bing data:", relatedTerms);
+          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, relatedTerms: relatedTerms, url: process.env.alchemyAPI2 || keys.alchemyAPI2});
         }
       });  //===end ASYNC Each
     }
