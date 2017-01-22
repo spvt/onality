@@ -10,7 +10,7 @@
       }
     } %>
   <% noun = noun.toLowerCase(); %>
-  <h4 class="grey-text subheading">The following articles may help you understand why people are feeling <%= noun %> about <%= keyword %></h4>
+  <h5 class="grey-text subheading">The following articles may help you understand why people are feeling <%= noun %> about <%= keyword %></h5>
 </div>
 
 <div class="container spacing">
@@ -39,19 +39,29 @@
 <div class="container spacing">
 </div>
 
-
-
 <script>
 
 var storedData = JSON.parse(localStorage.getItem('data'));
-//storedData is the Watson News Data
 
+// console.log(storedData);
 var newsArray = storedData.result.docs;
 var newsBlock = document.getElementById("news");
 newsArray.forEach(function(news){
+  var newsInfo = news.source.enriched.url;
   var heading = document.createElement('div');
-  heading.className = 'col l6 s12';
-  heading.innerHTML = '<h5 class="grey-text">' +news.source.enriched.url.title+'</h5><p class="grey-text text-lighten-4">'+ news.source.enriched.url.text +'</p>';
+  var title = newsInfo.title;
+  var url = newsInfo.url;
+  var text = newsInfo.text.slice(0, 180);
+  var regPunc = /[,!.?]/gi;
+  if (text[text.length] !== regPunc) {
+    text += " ...";
+  }
+  heading.className = 'col l6 s12, newsBlock';
+  heading.innerHTML = 
+    `<h6 class="grey-text headline">
+      <a href="${url}" target=_blank>${title}</a>
+    </h6>
+      <p class="grey-text text-lighten-4">${text}</p>`;
 
   newsBlock.appendChild(heading);
 });
