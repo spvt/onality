@@ -8,7 +8,6 @@ var express  = require('express'),
     alchemyDataNews = require('watson-developer-cloud/alchemy-data-news/v1'),
     keys     = require('./api/apiKeys'),
     Async    = require('async'),
-    colors   = require('colors'),
     helpers  = require('./scripts/helpers');
     app      = express();
     port     = process.env.PORT || 5000;
@@ -43,8 +42,6 @@ var tone_analyzer = new ToneAnalyzerV3({
   version_date: '2016-05-19'
 });
 
-
-
 //========Call API's=======
 // var getTweetData = function(keyword) {
 //   return new Promise(function(resolve, reject) {
@@ -55,89 +52,88 @@ var tone_analyzer = new ToneAnalyzerV3({
 //   });
 // };
 
+var getRelatedTerms = function(keyword) {
+  var relatedTerms = [];
+  var bingUrl = `https://api.cognitive.microsoft.com/bing/v5.0/search?q=${keyword}&count=5`;    
+  var options = {
+    url: bingUrl,
+    method: 'GET',
+    headers: {
+      'Ocp-Apim-Subscription-Key': process.env.bing || keys.bing
+    }
+  }
+  return new Promise(function(resolve, reject) {
+    request(options, function (error, response, body) {
+      var jsonData = JSON.parse(body); 
+      if (!error && response.statusCode === 200) {
+        relatedTerms.push(jsonData.relatedSearches.value);
+        resolve(relatedTerms);
+      }
+    });
+  });
+};
+
 app.get('/news', function(req, res){
-res.render('test');
+  res.render('test');
 });
 
 app.post('/searchresults', function(req, res){
   var keyword = req.body.keyword;
+  getRelatedTerms(keyword).then(function(terms) {
+    return terms;
+  }).then(function(relatedTerms) {
+    console.log(relatedTerms);
+    //========Call Twitter for real time opinions on search terms=======
+    client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=100`, function(error, tweets, response) {
+      var highestTone = [];
+      var emotionObj  = {
+        Sadness : 0,
+        Anger   : 0,
+        Disgust : 0,
+        Fear    : 0,
+        Joy     : 0
+      };
+      
+      if(error) {
+        console.log(error);
+      } else {
+        tweets.statuses.filter(function(tweetObj) {
+          // console.log("Filter is working on:", tweetObj);
+          return helpers.isReply(tweetObj);
+        });    
 
-  //========Call Twitter for real time opinions on search terms=======
-  client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=100`, function(error, tweets, response) {
-    var highestTone = [];
-    var emotionObj  = {
-      Sadness : 0,
-      Anger   : 0,
-      Disgust : 0,
-      Fear    : 0,
-      Joy     : 0
-    };
-    var relatedTerms = [];
-    if(error) {
-      console.log(error);
-    } else {
-      tweets.statuses.filter(function(tweetObj) {
-        // console.log("Filter is working on:", tweetObj);
-        return helpers.isReply(tweetObj);
-      });    
+        //========Call Watson to get sentiments of Twitter data=======
+        Async.each(tweets.statuses, function(tweet, callback){
+          // console.log(tweet.text.bold);
+          tone_analyzer.tone({ text: tweet.text},
+          function(err, tone){
+            if(err){
+              console.log(err);
+            } else {
+              var tone = tone.document_tone.tone_categories[0].tones;
+              var singleTone = tone.reduce(function(tone1, tone2){
+                return tone1.score > tone2.score ? tone1 : tone2;
+              });
 
-      //========Call Watson to get sentiments of Twitter data=======
-      Async.each(tweets.statuses, function(tweet, callback){
-        // console.log(tweet.text.bold);
-        tone_analyzer.tone({ text: tweet.text},
-        function(err, tone){
+              if(!emotionObj[singleTone.tone_name]){
+                emotionObj[singleTone.tone_name] = 1;
+              } else {
+                emotionObj[singleTone.tone_name]++;
+              }
+              callback();
+            }
+          });
+        }, function(err){
           if(err){
             console.log(err);
           } else {
-            //========Call Bing for related search terms=======
-            var bingUrl = `https://api.cognitive.microsoft.com/bing/v5.0/search?q=${keyword}`;    
-            var options = {
-              url: bingUrl,
-              method: 'GET',
-              headers: {
-                'Ocp-Apim-Subscription-Key': process.env.bing || keys.bing
-              }
-            };
-            
-            request(options, function (error, response, body) {
-              var jsonData = JSON.parse(body);    
-              if (!error && response.statusCode === 200) {  
-                relatedTerms.push(jsonData.relatedSearches.value);
-              }
-            });            
-
-            var tone = tone.document_tone.tone_categories[0].tones;
-            var singleTone = tone.reduce(function(tone1, tone2){
-              return tone1.score > tone2.score ? tone1 : tone2;
-            });
-
-             //console.log(singleTone.tone_name);
-            //  highestTone.push([tweet.text,
-            //      tone.reduce(function(tone1, tone2){
-            //      if(tone1.score > tone2.score){
-            //       return tone1;
-            //      } else {
-            //      return tone2;
-            //     }
-            //  }), tweet.user.name]);
-            if(!emotionObj[singleTone.tone_name]){
-              emotionObj[singleTone.tone_name] = 1;
-            } else {
-              emotionObj[singleTone.tone_name]++;
-            }
-            callback();
+            console.log("Bing data:", relatedTerms);
+            res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, relatedTerms: relatedTerms, url: process.env.alchemyAPI2 || keys.alchemyAPI2});
           }
-        });
-      }, function(err){
-        if(err){
-          console.log(err);
-        } else {
-          // console.log("Bing data:", relatedTerms);
-          res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, relatedTerms: relatedTerms, url: process.env.alchemyAPI2 || keys.alchemyAPI2});
-        }
-      });  //===end ASYNC Each
-    }
-  }); // end Twitter Call
+        });  //===end ASYNC Each
+      }
+    }); // end Twitter Call
+  });
 }); // end post Call
 
 app.listen(port, function(){

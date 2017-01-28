@@ -20,11 +20,11 @@
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js'></script>
 
 <script>
-
 var emotionObj = <%- JSON.stringify(emotionObj) %>;
 var keyword = <%- JSON.stringify(keyword) %>;
 var url = <%- JSON.stringify(url) %>;
 var relatedTerms = <%- JSON.stringify(relatedTerms) %>;
+//console.log(relatedTerms);
 
 var labels = [];
 var data = [];
@@ -61,6 +61,7 @@ var myChart = new Chart(ctx, {
     }]
   }
 });
+
 
 localStorage.setItem('data', JSON.stringify({
   "status": "OK",
@@ -151,6 +152,59 @@ localStorage.setItem('data', JSON.stringify({
     "status": "OK"
   }
 }));
+
+localStorage.setItem('relatedTerms', JSON.stringify({
+  terms: [
+    { text: 'Self Driving Cars Pros and Cons',
+      displayText: 'Self Driving Cars Pros and Cons',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=ZjkOXHyXoQbwwdXNtljBn0LOuKNJPtwTt05AHEhdt-s&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dSelf%2bDriving%2bCars%2bPros%2band%2bCons&p=DevEx,5408.1' },
+    { text: 'Self Driving Cars 2017',
+      displayText: 'Self Driving Cars 2017',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=z7IL15dkQgSMlgLZuAWEqi-JoA4_HgxOxVSfLEYmx-8&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dSelf%2bDriving%2bCars%2b2017&p=DevEx,5409.1' },
+    { text: 'Self Driving Mercedes Video',
+      displayText: 'Self Driving Mercedes Video',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=w5ozShTY2n5NU-3pGNKVn-723vBeQmPTulfKN59rTLM&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dSelf%2bDriving%2bMercedes%2bVideo&p=DevEx,5410.1' },
+    { text: 'When Are Self Driving Cars Coming Out',
+      displayText: 'When Are Self Driving Cars Coming Out',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=fZsAe5-7HlHUP6PT9qFoqE4P0R0OEZ-L0uCvFHg_YC0&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dWhen%2bAre%2bSelf%2bDriving%2bCars%2bComing%2bOut&p=DevEx,5411.1' },
+    { text: 'Self Driving Cars for Sale',
+      displayText: 'Self Driving Cars for Sale',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=mcax8_wNnYTgq4noGT-CY0buCuolKOav9oHcULX5Jto&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dSelf%2bDriving%2bCars%2bfor%2bSale&p=DevEx,5412.1' },
+    { text: 'Self Driving Cars Issues',
+      displayText: 'Self Driving Cars Issues',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=duv9_YUYpRpJyyoEbMy3ogr77_LnAK5azg3CsBASxtY&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dSelf%2bDriving%2bCars%2bIssues&p=DevEx,5413.1' },
+    { text: 'How Do Self Driving Cars Work',
+      displayText: 'How Do Self Driving Cars Work',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=FshAF_3SJrTBhoH9glMDb6HLyP8ZsysLxZe6X4CE4zU&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dHow%2bDo%2bSelf%2bDriving%2bCars%2bWork&p=DevEx,5414.1' },
+    { text: 'Volvo Self Driving Car',
+      displayText: 'Volvo Self Driving Car',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=epJVwYymdxpKkjSQni78kEkHfqSPISqe-xlIO7tqGo0&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dVolvo%2bSelf%2bDriving%2bCar&p=DevEx,5415.1' },
+    { text: 'Self Driving Cars Pros and Cons',
+      displayText: 'Self Driving Cars Pros and Cons',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=ZjkOXHyXoQbwwdXNtljBn0LOuKNJPtwTt05AHEhdt-s&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dSelf%2bDriving%2bCars%2bPros%2band%2bCons&p=DevEx,5408.1' },
+    { text: 'Self Driving Cars 2017',
+      displayText: 'Self Driving Cars 2017',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=z7IL15dkQgSMlgLZuAWEqi-JoA4_HgxOxVSfLEYmx-8&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dSelf%2bDriving%2bCars%2b2017&p=DevEx,5409.1' },
+    { text: 'Self Driving Mercedes Video',
+      displayText: 'Self Driving Mercedes Video',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=w5ozShTY2n5NU-3pGNKVn-723vBeQmPTulfKN59rTLM&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dSelf%2bDriving%2bMercedes%2bVideo&p=DevEx,5410.1' },
+    { text: 'When Are Self Driving Cars Coming Out',
+      displayText: 'When Are Self Driving Cars Coming Out',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=fZsAe5-7HlHUP6PT9qFoqE4P0R0OEZ-L0uCvFHg_YC0&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dWhen%2bAre%2bSelf%2bDriving%2bCars%2bComing%2bOut&p=DevEx,5411.1' },
+    { text: 'Self Driving Cars for Sale',
+      displayText: 'Self Driving Cars for Sale',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=mcax8_wNnYTgq4noGT-CY0buCuolKOav9oHcULX5Jto&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dSelf%2bDriving%2bCars%2bfor%2bSale&p=DevEx,5412.1' },
+    { text: 'Self Driving Cars Issues',
+      displayText: 'Self Driving Cars Issues',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=duv9_YUYpRpJyyoEbMy3ogr77_LnAK5azg3CsBASxtY&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dSelf%2bDriving%2bCars%2bIssues&p=DevEx,5413.1' },
+    { text: 'How Do Self Driving Cars Work',
+      displayText: 'How Do Self Driving Cars Work',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=FshAF_3SJrTBhoH9glMDb6HLyP8ZsysLxZe6X4CE4zU&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dHow%2bDo%2bSelf%2bDriving%2bCars%2bWork&p=DevEx,5414.1' },
+    { text: 'Volvo Self Driving Car',
+      displayText: 'Volvo Self Driving Car',
+      webSearchUrl: 'https://www.bing.com/cr?IG=38B3DA3620D14687AE442D75E5B06EB3&CID=2381EC29187A6CD7012AE631194B6D67&rd=1&h=epJVwYymdxpKkjSQni78kEkHfqSPISqe-xlIO7tqGo0&v=1&r=https%3a%2f%2fwww.bing.com%2fsearch%3fq%3dVolvo%2bSelf%2bDriving%2bCar&p=DevEx,5415.1' }
+    ]
+  }));
 </script>
 
 <% include partials/news %>
