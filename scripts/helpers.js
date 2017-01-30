@@ -1,6 +1,15 @@
 var Promise = require('bluebird');
 var request = require('request');
+var Twitter  = require('twitter');
 var keys = require('../api/apiKeys');
+
+//============Twitter===========
+var client = new Twitter({
+  consumer_key: process.env.twitterKey || keys.twitterKey,
+  consumer_secret: process.env.twitterSecret || keys.twitterSecret,
+  access_token_key: process.env.twitterToken || keys.twitterToken,
+  access_token_secret: process.env.twitterTokenSecret || keys.twitterTokenSecret
+});
 
 // ========Helper functions=======
 var helpers = {
@@ -16,7 +25,7 @@ var helpers = {
 	  });
 	},
 	isReply(tweet) {
-	  if ( tweet.retweeted_status
+	  if ( tweet.retweeted
 	    || tweet.in_reply_to_status_id
 	    || tweet.in_reply_to_status_id_str
 	    || tweet.in_reply_to_user_id
@@ -48,6 +57,22 @@ var apiHelpers = {
 	      }
 	    });
 	  });
+	},
+	getTweets: function(keyword) {
+		return new Promise(function(resolve, reject) {
+			client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=3`, 
+			function(error, tweets, response) {	      
+	      if(error) {
+	        console.log(error);
+	      } else {
+	        tweets.statuses.filter(function(tweetObj) {	        		          
+	          return helpers.isReply(tweetObj);
+	        });
+	        // console.log("Tweets Statuses",tweets.statuses);
+	        resolve(tweets.statuses);
+	      }
+    	});
+		});
 	}
 }
 

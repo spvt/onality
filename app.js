@@ -8,6 +8,7 @@ var express  = require('express'),
     alchemyDataNews = require('watson-developer-cloud/alchemy-data-news/v1'),
     keys     = require('./api/apiKeys'),
     Async    = require('async'),
+    tagCloud = require('tag-cloud'),
     helpers  = require('./scripts/helpers').helpers,
     apiHelpers  = require('./scripts/helpers').apiHelpers,
     app      = express(),
@@ -28,13 +29,13 @@ app.get('/', function(req, res) {
   res.render('index.ejs');
 });
 
-//============Twitter===========
-var client = new Twitter({
-  consumer_key: process.env.twitterKey || keys.twitterKey,
-  consumer_secret: process.env.twitterSecret || keys.twitterSecret,
-  access_token_key: process.env.twitterToken || keys.twitterToken,
-  access_token_secret: process.env.twitterTokenSecret || keys.twitterTokenSecret
-});
+// //============Twitter===========
+// var client = new Twitter({
+//   consumer_key: process.env.twitterKey || keys.twitterKey,
+//   consumer_secret: process.env.twitterSecret || keys.twitterSecret,
+//   access_token_key: process.env.twitterToken || keys.twitterToken,
+//   access_token_secret: process.env.twitterTokenSecret || keys.twitterTokenSecret
+// });
 
 //========Watson Tone Analyzer=======
 var tone_analyzer = new ToneAnalyzerV3({
@@ -47,14 +48,23 @@ app.get('/news', function(req, res){
   res.render('test');
 });
 
+Promise.promisifyAll(tagCloud);
+
 app.post('/searchresults', function(req, res){
   var keyword = req.body.keyword;
-  apiHelpers.getRelatedTerms(keyword).then(function(terms) {
-    return terms;
-  }).then(function(relatedTerms) {
-    console.log(relatedTerms);
-    //========Call Twitter for real time opinions on search terms=======
-    client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=100`, function(error, tweets, response) {
+  var spanTags = apiHelpers.getRelatedTerms(keyword).then(function(terms) {
+    var tags = terms[0].map(function(results) {
+      var random = Math.floor(Math.random() * terms[0].length)
+      return {tagName: results.text, count: random};
+    });    
+    return tagCloud.tagCloudAsync(tags, {
+      randomize: false
+    });
+  });
+  
+  
+  apiHelpers.getTweets(keyword).then(function(statuses) {
+    //========Call Watson to get sentiments of Twitter data=======
       var highestTone = [];
       var emotionObj  = {
         Sadness : 0,
@@ -63,47 +73,34 @@ app.post('/searchresults', function(req, res){
         Fear    : 0,
         Joy     : 0
       };
-      
-      if(error) {
-        console.log(error);
-      } else {
-        tweets.statuses.filter(function(tweetObj) {
-          // console.log("Filter is working on:", tweetObj);
-          return helpers.isReply(tweetObj);
-        });    
-
-        //========Call Watson to get sentiments of Twitter data=======
-        Async.each(tweets.statuses, function(tweet, callback){
-          // console.log(tweet.text.bold);
+        Async.each(statuses, function(tweet, callback) {
           tone_analyzer.tone({ text: tweet.text},
-          function(err, tone){
-            if(err){
-              console.log(err);
-            } else {
-              var tone = tone.document_tone.tone_categories[0].tones;
-              var singleTone = tone.reduce(function(tone1, tone2){
-                return tone1.score > tone2.score ? tone1 : tone2;
-              });
-
-              if(!emotionObj[singleTone.tone_name]){
-                emotionObj[singleTone.tone_name] = 1;
+            function(err, tone) {
+              if(err){
+                console.log(err);
               } else {
-                emotionObj[singleTone.tone_name]++;
+                var tone = tone.document_tone.tone_categories[0].tones;
+                var singleTone = tone.reduce(function(tone1, tone2){
+                  return tone1.score > tone2.score ? tone1 : tone2;
+                });
+
+                if(!emotionObj[singleTone.tone_name]){
+                  emotionObj[singleTone.tone_name] = 1;
+                } else {
+                  emotionObj[singleTone.tone_name]++;
+                }
+                callback();
               }
-              callback();
-            }
           });
         }, function(err){
           if(err){
             console.log(err);
           } else {
-            console.log("Bing data:", relatedTerms);
-            res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, relatedTerms: relatedTerms, url: process.env.alchemyAPI2 || keys.alchemyAPI2});
+            // console.log("Bing data:", spanTags);
+            res.render('searchresults', {emotionObj: emotionObj, keyword : keyword, spanTags: spanTags, url: process.env.alchemyAPI2 || keys.alchemyAPI2});
           }
         });  //===end ASYNC Each
-      }
-    }); // end Twitter Call
-  });
+  })
 }); // end post Call
 
 app.listen(port, function(){
