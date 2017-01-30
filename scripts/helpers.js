@@ -1,6 +1,7 @@
 var Promise = require('bluebird');
 var request = require('request');
-var Twitter  = require('twitter');
+var Twitter = require('twitter');
+var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
 var keys = require('../api/apiKeys');
 
 //============Twitter===========
@@ -11,6 +12,13 @@ var client = new Twitter({
   access_token_secret: process.env.twitterTokenSecret || keys.twitterTokenSecret
 });
 
+//========Watson Tone Analyzer=======
+var tone_analyzer = new ToneAnalyzerV3({
+  username: process.env.watsonUsername || keys.watsonUsername,
+  password: process.env.watsonPass || keys.watsonPass,
+  version_date: '2016-05-19'
+});
+
 // ========Helper functions=======
 var helpers = {
 	getHighestToneScore: function(tones) {
@@ -19,12 +27,7 @@ var helpers = {
 	    return tone1.score > tone2.score ? tone1 : tone2;
 	  });
 	},
-	getTweets: function(arrayOfTweets) {
-	  return arrayOfTweets.map(function(tweetData) {
-	    return tweetData.text;
-	  });
-	},
-	isReply(tweet) {
+	isReply: function(tweet) {
 	  if ( tweet.retweeted
 	    || tweet.in_reply_to_status_id
 	    || tweet.in_reply_to_status_id_str
@@ -67,13 +70,40 @@ var apiHelpers = {
 	      } else {
 	        tweets.statuses.filter(function(tweetObj) {	        		          
 	          return helpers.isReply(tweetObj);
-	        });
-	        // console.log("Tweets Statuses",tweets.statuses);
+	        });	        
 	        resolve(tweets.statuses);
 	      }
     	});
 		});
-	}
+	},
+	getTones: function(statuses) {
+		var highestTone = [];
+    var emotionObj  = {
+      Sadness : 0,
+      Anger   : 0,
+      Disgust : 0,
+      Fear    : 0,
+      Joy     : 0
+    };
+    return new Promise(function(resolve,reject) {
+    	statuses.forEach(function(tweet) {    		
+    		tone_analyzer.tone({ text: tweet.text},
+	        function(err, tones) {
+	          if(err) {
+	            console.log(err);
+	          } else {
+	          	var singleTone = helpers.getHighestToneScore(tones);
+	            if(!emotionObj[singleTone.tone_name]){
+	              emotionObj[singleTone.tone_name] = 1;
+	            } else {
+	              emotionObj[singleTone.tone_name]++;
+	            }
+	          }		    		
+			      resolve(emotionObj);
+	      	});
+    	});
+    });
+  }
 }
 
 module.exports = {
