@@ -23,10 +23,6 @@ app.get('/', function(req, res) {
   res.render('index.ejs');
 });
 
-app.get('/news', function(req, res){
-  res.render('test');
-});
-
 Promise.promisifyAll(tagCloud);
 
 app.post('/searchresults', function(req, res) {
@@ -45,7 +41,7 @@ app.post('/searchresults', function(req, res) {
     var emotionObj = apiHelpers.getTones(statuses);      
       return emotionObj;
     }).then(function(emotionObj) {
-        console.log("Emotions:", emotionObj);
+        // console.log("Emotions:", emotionObj);
         res.render('searchresults', {
           emotionObj: emotionObj, 
           keyword : keyword, 

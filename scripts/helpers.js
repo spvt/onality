@@ -63,7 +63,7 @@ var apiHelpers = {
 	},
 	getTweets: function(keyword) {
 		return new Promise(function(resolve, reject) {
-			client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=3`, 
+			client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=100`, 
 			function(error, tweets, response) {	      
 	      if(error) {
 	        console.log(error);

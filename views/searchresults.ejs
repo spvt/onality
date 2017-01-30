@@ -24,8 +24,8 @@ var emotionObj = <%- JSON.stringify(emotionObj) %>;
 var keyword = <%- JSON.stringify(keyword) %>;
 var url = <%- JSON.stringify(url) %>;
 var spanTags = <%- JSON.stringify(spanTags) %>;
-console.log(spanTags.fulfillmentValue);
-console.log(emotionObj);
+//console.log(spanTags.fulfillmentValue);
+//console.log(emotionObj);
 
 var labels = [];
 var data = [];
@@ -208,5 +208,7 @@ localStorage.setItem('relatedTerms', JSON.stringify({
   }));
 </script>
 
+
 <% include partials/news %>
+<% include partials/tags %>
 <% include partials/footer %>
