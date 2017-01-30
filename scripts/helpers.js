@@ -1,3 +1,7 @@
+var Promise = require('bluebird');
+var request = require('request');
+var keys = require('../api/apiKeys');
+
 // ========Helper functions=======
 var helpers = {
 	getHighestToneScore: function(tones) {
@@ -23,4 +27,31 @@ var helpers = {
 	}
 };
 
-module.exports = helpers;
+// ========API Helper functions=======
+var apiHelpers = {
+	getRelatedTerms: function(keyword) {
+	  var relatedTerms = [];
+	  var bingUrl = `https://api.cognitive.microsoft.com/bing/v5.0/search?q=${keyword}&count=5`;    
+	  var options = {
+	    url: bingUrl,
+	    method: 'GET',
+	    headers: {
+	      'Ocp-Apim-Subscription-Key': process.env.bing || keys.bing
+	    }
+	  }
+	  return new Promise(function(resolve, reject) {
+	    request(options, function (error, response, body) {
+	      var jsonData = JSON.parse(body); 
+	      if (!error && response.statusCode === 200) {
+	        relatedTerms.push(jsonData.relatedSearches.value);
+	        resolve(relatedTerms);
+	      }
+	    });
+	  });
+	}
+}
+
+module.exports = {
+	helpers: helpers,
+	apiHelpers: apiHelpers
+}

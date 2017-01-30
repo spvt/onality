@@ -2,14 +2,15 @@ var express  = require('express'),
     Twitter  = require('twitter'),
     Promise  = require('bluebird'),
     watson   = require('watson-developer-cloud'),
-    request  = require('request');
-    bodyParser = require('body-parser'), // middleware to get data from forms. Express can't do this.
+    request  = require('request'),
+    bodyParser = require('body-parser'),
     ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3'),
     alchemyDataNews = require('watson-developer-cloud/alchemy-data-news/v1'),
     keys     = require('./api/apiKeys'),
     Async    = require('async'),
-    helpers  = require('./scripts/helpers');
-    app      = express();
+    helpers  = require('./scripts/helpers').helpers,
+    apiHelpers  = require('./scripts/helpers').apiHelpers,
+    app      = express(),
     port     = process.env.PORT || 5000;
 
 
@@ -42,44 +43,13 @@ var tone_analyzer = new ToneAnalyzerV3({
   version_date: '2016-05-19'
 });
 
-//========Call API's=======
-// var getTweetData = function(keyword) {
-//   return new Promise(function(resolve, reject) {
-//     client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&count=10`, function(error, tweets, response) {
-//       if(error) console.log(error);
-//       resolve(tweets);
-//     });
-//   });
-// };
-
-var getRelatedTerms = function(keyword) {
-  var relatedTerms = [];
-  var bingUrl = `https://api.cognitive.microsoft.com/bing/v5.0/search?q=${keyword}&count=5`;    
-  var options = {
-    url: bingUrl,
-    method: 'GET',
-    headers: {
-      'Ocp-Apim-Subscription-Key': process.env.bing || keys.bing
-    }
-  }
-  return new Promise(function(resolve, reject) {
-    request(options, function (error, response, body) {
-      var jsonData = JSON.parse(body); 
-      if (!error && response.statusCode === 200) {
-        relatedTerms.push(jsonData.relatedSearches.value);
-        resolve(relatedTerms);
-      }
-    });
-  });
-};
-
 app.get('/news', function(req, res){
   res.render('test');
 });
 
 app.post('/searchresults', function(req, res){
   var keyword = req.body.keyword;
-  getRelatedTerms(keyword).then(function(terms) {
+  apiHelpers.getRelatedTerms(keyword).then(function(terms) {
     return terms;
   }).then(function(relatedTerms) {
     console.log(relatedTerms);
