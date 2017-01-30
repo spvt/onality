@@ -29,6 +29,7 @@ build/Release
 # Dependency directories
 node_modules
 jspm_packages
+api
 
 # Optional npm cache directory
 .npm
@@ -36,5 +37,4 @@ jspm_packages
 # Optional REPL history
 .node_repl_history
 
-# API KEYS
-api
+
