@@ -7,8 +7,10 @@
 </div>
 
 <div class="container">
-  <div class="row valign-wrapper" id="tags">
-
+  <div class="row valign-wrapper" >
+	  <form name="taglinks" action="/searchresults" method="post" id="tags">
+		  
+		</form>
   </div>
 </div>
 
@@ -16,21 +18,17 @@
 </div>
 
 <script>
+	var tags =  spanTags.fulfillmentValue ;
+	var spanTags = '';
+	tags.forEach(function(tag){
+	  var random = Math.floor(Math.random() * tags.length);
+	  console.log(tag);
+	  spanTags += `<button type="submit" name="keyword" value="${tag}" class="tags bucket${random}">${tag}</button>`;
+	});
 
-var tags =  spanTags.fulfillmentValue ;
-var spanTags = '';
-tags.forEach(function(tag){
-  var random = Math.floor(Math.random() * tags.length);
-  console.log(tag);
-  spanTags += '<a href="/searchresults/'+ tag +'"  class="bucket'+ random +'">'+ tag + '</a>';
-});
-
-var tagsBlock = document.getElementById("tags");
-var heading = document.createElement('div');
-heading.className = 'col l12 s12, center-align';
-heading.innerHTML = spanTags;
-tagsBlock.appendChild(heading);
-
-//<span class="bucket0">Jimmy Carter Immigration Ban</span><span class="bucket0">Immigration Bans in US History</span><span class="bucket6">Trump Muslim Immigration Ban</span><span class="bucket9">Bill Clinton Muslim Immigration Ban</span><span class="bucket0">Trump Immigration Ban</span><span class="bucket7">Ban on Muslim Immigration</span><span class="bucket1">Did Jimmy Carter Ban Immigration</span><span class="bucket3">Should Immigration Be Banned</span>
-
+	var tagsBlock = document.getElementById("tags");
+	var heading = document.createElement('div');
+	heading.className = 'col l12 s12, center-align';
+	heading.innerHTML = spanTags;
+	tagsBlock.appendChild(heading);
 </script>

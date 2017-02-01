@@ -26,6 +26,7 @@ app.get('/', function(req, res) {
 Promise.promisifyAll(tagCloud);
 
 app.post('/searchresults', function(req, res) {
+  console.log("Checking the link value:",req.body);
   var keyword = req.body.keyword;
   var spanTags = apiHelpers.getRelatedTerms(keyword).then(function(terms) {
     return terms[0].map(function(result){
