@@ -13,14 +13,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Bigghead/tone-analyzer.git"
+    "url": "git+https://github.com/Bigghead/onality.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Bigghead/tone-analyzer/issues"
+    "url": "https://github.com/Bigghead/onality/issues"
   },
-  "homepage": "https://github.com/Bigghead/tone-analyzer#readme",
+  "homepage": "https://github.com/Bigghead/onality#readme",
   "dependencies": {    
     "bluebird": "^3.4.7",
     "body-parser": "^1.15.2",
