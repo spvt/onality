@@ -1,6 +1,5 @@
 <% include partials/header %>
-<% var keyword = keyword ; %>
-<% var url = url; %>
+<% var keyword = keyword; %>
 
 <div class="container center-align">
   <h4 class="center orange-text">How People Feel About <%= keyword %></h4>
@@ -20,48 +19,48 @@
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js'></script>
 
 <script>
-var emotionObj = <%- JSON.stringify(emotionObj) %>;
-var keyword = <%- JSON.stringify(keyword) %>;
-var url = <%- JSON.stringify(url) %>;
-var spanTags = <%- JSON.stringify(spanTags) %>;
-//console.log(spanTags.fulfillmentValue);
-//console.log(emotionObj);
+  var emotionObj = <%- JSON.stringify(emotionObj) %>;
+  var keyword = <%- JSON.stringify(keyword) %>;
+  var url = <%- JSON.stringify(url) %>;
+  var spanTags = <%- JSON.stringify(spanTags) %>;
+  //console.log(spanTags.fulfillmentValue);
+  //console.log(emotionObj);
 
-var labels = [];
-var data = [];
+  var labels = [];
+  var data = [];
 
-for( var key in emotionObj){
-  labels.push(key);
-  data.push(emotionObj[key]);
-}
-var ctx = document.getElementById("myChart");
-var myChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: labels,
-    datasets: [{
-      label: '# of Votes',
-      data: data,
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-      ],
-      borderColor: [
-        'rgba(255,99,132,1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
-      ],
-      borderWidth: 1
-    }]
+  for( var key in emotionObj){
+    labels.push(key);
+    data.push(emotionObj[key]);
   }
-});
+  var ctx = document.getElementById("myChart");
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '# of Votes',
+        data: data,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+          'rgba(255,99,132,1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    }
+  });
 
 
 localStorage.setItem('data', JSON.stringify({

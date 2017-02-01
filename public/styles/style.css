@@ -52,6 +52,16 @@ h1, h2, h3, h4, h5, h6 {
 	padding-right: 30px;
 }
 
+button.tags {
+	background: none;
+  border: none;  
+  cursor: pointer;  
+}
+
+button.tags:active, .tags:focus {
+	outline: none;
+}
+
 .bucket0 { font-size: 1.5rem; color: #81d4fa;}
 .bucket1 { font-size: 1rem; color: #29b6f6}
 .bucket2 { font-size: 1.2rem; color: #03a9f4}

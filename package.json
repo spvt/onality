@@ -1,5 +1,5 @@
 {
-  "name": "tone-analyzer",
+  "name": "onality",
   "version": "1.0.0",
   "description": "an app that identifies emotions from key phrases from user inputs",
   "main": "index.js",
