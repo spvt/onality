@@ -16,15 +16,14 @@
 </div>
 
 <script>
-var tags = ['Jimmy Carter Immigration Ban', 'Immigration Bans in US History', 'Trump Muslim Immigration Ban', 'Trump Immigration Ban', 'Ban on Muslim Immigration',
-            'Bill Clinton Muslim Immigration Ban', 'Should Immigration Be Banned', 'Random musings about ice cream'
-];
+
+var tags =  spanTags.fulfillmentValue ;
 var spanTags = '';
 tags.forEach(function(tag){
   var random = Math.floor(Math.random() * tags.length);
-  spanTags += '<a href="/searchresults/'+ tag+'"  class="bucket'+ random +'">'+ tag + '</a>';
+  console.log(tag);
+  spanTags += '<a href="/searchresults/'+ tag +'"  class="bucket'+ random +'">'+ tag + '</a>';
 });
-console.log(spanTags);
 
 var tagsBlock = document.getElementById("tags");
 var heading = document.createElement('div');
