@@ -1,7 +1,7 @@
 [Twitter]: https://dev.twitter.com/docs
 [IBM Watson]: https://developer.ibm.com/watson/
 
-# tone-analyzer
+# onality
 We use linguistic analysis to identify emotions. Simply type in a topic and we'll show you how people are feeling about it in real time. For example, type in 'Donald Trump as President' and you'll get an interesting read on how people are feeling about that. 
 
 # Getting Started
