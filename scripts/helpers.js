@@ -2,7 +2,7 @@ var Promise = require('bluebird');
 var request = require('request');
 var Twitter = require('twitter');
 var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
-var keys = require('../api/apiKeys');
+// var keys = require('../api/apiKeys');
 
 //============Twitter===========
 var client = new Twitter({
@@ -18,6 +18,8 @@ var tone_analyzer = new ToneAnalyzerV3({
   password: process.env.watsonPass || keys.watsonPass,
   version_date: '2016-05-19'
 });
+
+var alchemyAPI = process.env.alchemyAPI || keys.alchemyAPI;
 
 // ========Helper functions=======
 var helpers = {
@@ -113,7 +115,7 @@ var apiHelpers = {
   		"count=5&" +
   		"q.enriched.url.enrichedTitle.keywords.keyword.text=" + keyword + "&" +
   		"return=enriched.url.url,enriched.url.title,enriched.url.text&" +
-  		"apikey=" + keys.alchemyAPI;
+  		"apikey=" + alchemyAPI;
 
   	let news;
   	return new Promise(function(resolve, reject) {

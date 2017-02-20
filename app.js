@@ -5,7 +5,7 @@ var express  = require('express'),
     bodyParser = require('body-parser'),    
     helpers  = require('./scripts/helpers').helpers,
     apiHelpers  = require('./scripts/helpers').apiHelpers,
-    keys     = require('./api/apiKeys'),
+    // keys     = require('./api/apiKeys'),
     app      = express(),
     port     = process.env.PORT || 5000;
 
