@@ -2,11 +2,10 @@ var express  = require('express'),
     Promise  = require('bluebird'),
     watson   = require('watson-developer-cloud'),
     alchemyDataNews = require('watson-developer-cloud/alchemy-data-news/v1'),
-    bodyParser = require('body-parser'),
-    tagCloud = require('tag-cloud'),
+    bodyParser = require('body-parser'),    
     helpers  = require('./scripts/helpers').helpers,
     apiHelpers  = require('./scripts/helpers').apiHelpers,
-    keys     = require('./api/apiKeys');
+    keys     = require('./api/apiKeys'),
     app      = express(),
     port     = process.env.PORT || 5000;
 
@@ -23,10 +22,8 @@ app.get('/', function(req, res) {
   res.render('index.ejs');
 });
 
-Promise.promisifyAll(tagCloud);
-
 app.post('/searchresults', function(req, res) {
-  console.log("Checking the link value:",req.body);
+  // console.log("Checking the link value:",req.body);
   var keyword = req.body.keyword;
   var spanTags = apiHelpers.getRelatedTerms(keyword).then(function(terms) {
     return terms[0].map(function(result){
