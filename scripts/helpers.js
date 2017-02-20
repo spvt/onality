@@ -103,6 +103,32 @@ var apiHelpers = {
 	      	});
     	});
     });
+  },
+  getNews: function(keyword) {
+  	var encodedKeyword = encodeURI(keyword);
+  	const url = "https://gateway-a.watsonplatform.net/calls/data/GetNews?" +
+  		"outputMode=json&" + 
+  		"start=now-1d&" +
+  		"end=now&" +
+  		"count=5&" +
+  		"q.enriched.url.enrichedTitle.keywords.keyword.text=" + keyword + "&" +
+  		"return=enriched.url.url,enriched.url.title,enriched.url.text&" +
+  		"apikey=" + keys.alchemyAPI;
+
+  	let news;
+  	return new Promise(function(resolve, reject) {
+	    request(url, function (error, response, body) {
+	      var jsonData = JSON.parse(body);
+	      console.log(jsonData.result);  
+	      if (!jsonData.result.docs) {
+	      	reject("Sorry, we're unable to find any news articles about " + keyword);
+	      }
+	      if (!error && response.statusCode === 200) {
+	        news = jsonData.result.docs;
+	        resolve(news);
+	      }
+	    });
+	  });
   }
 }
 

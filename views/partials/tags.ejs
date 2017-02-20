@@ -21,8 +21,7 @@
 	var tags =  spanTags.fulfillmentValue ;
 	var spanTags = '';
 	tags.forEach(function(tag){
-	  var random = Math.floor(Math.random() * tags.length);
-	  console.log(tag);
+	  var random = Math.floor(Math.random() * tags.length);	  
 	  spanTags += `<button type="submit" name="keyword" value="${tag}" class="tags bucket${random}">${tag}</button>`;
 	});
 
