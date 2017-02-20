@@ -1,6 +1,6 @@
 
 <div class="container">
-  <% emotionObj %>
+  <% emotionObj %>  
   <% var noun = ""; %>
   <% var score = 0; %>
   <% for (var tone in emotionObj) {
@@ -10,13 +10,16 @@
       }
     } %>
   <% noun = noun.toLowerCase(); %>
-  <h5 class="grey-text subheading">The following articles may help you understand why people are feeling <%= noun %> about <%= keyword %></h5>
+
+  <h5 class="grey-text subheading" id="newsheading">The following articles may help you understand why people are feeling <%= noun %> about <%= keyword %>
+  </h5>
+  
 </div>
 
 <div class="container spacing">
 </div>
 
-<div class="container">
+<div class="container" id="error-msg">  
   <div class="row" id="news">
 
   </div>
@@ -40,81 +43,33 @@
 </div>
 
 <script>
-  var storedData = JSON.parse(localStorage.getItem('data'));
-  var relatedTerms = JSON.parse(localStorage.getItem('relatedTerms'));
+  //var storedData = JSON.parse(localStorage.getItem('data'));
+  var newsData = newsData;
 
-  //console.log(relatedTerms);
+  if (typeof newsData !== "string") {    
+    var newsArray = newsData;
+    var newsBlock = document.getElementById("news");
+    newsArray.forEach(function(newsObj){    
+      var heading = document.createElement('div');
+      var title = newsObj.title;
+      var url = newsObj.url;
+      var text = newsObj.text.slice(0, 180);
+      var regPunc = /[,!.?]/gi;
+      if (text[text.length] !== regPunc) {
+        text += " ...";
+      }
+      heading.className = 'col l6 s12 newsBlock';
+      heading.innerHTML = 
+        `<h6 class="grey-text headline">
+          <a href="${url}" target=_blank>${title}</a>
+        </h6>
+          <p class="grey-text">${text}</p>`;
 
-  var newsArray = storedData.result.docs;
-  var newsBlock = document.getElementById("news");
-  newsArray.forEach(function(news){
-    var newsInfo = news.source.enriched.url;
-    var heading = document.createElement('div');
-    var title = newsInfo.title;
-    var url = newsInfo.url;
-    var text = newsInfo.text.slice(0, 180);
-    var regPunc = /[,!.?]/gi;
-    if (text[text.length] !== regPunc) {
-      text += " ...";
-    }
-    heading.className = 'col l6 s12, newsBlock';
-    heading.innerHTML = 
-      `<h6 class="grey-text headline">
-        <a href="${url}" target=_blank>${title}</a>
-      </h6>
-        <p class="grey-text text-lighten-4">${text}</p>`;
+      newsBlock.appendChild(heading);
+    });
+  } else if (typeof newsData === "string") {
+    var newsHeading = document.getElementById("newsheading");
+    newsHeading.innerHTML = newsData;
+  }
 
-    newsBlock.appendChild(heading);
-  });
-
-
-// function loadXMLDoc(url) {
-//   var xmlhttp = new XMLHttpRequest();
-//   xmlhttp.onreadystatechange = function() {
-//     if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
-//       if (xmlhttp.status == 200) {
-//         var parsedNewsData = JSON.parse(xmlhttp.responseText);
-//
-//         console.log(parsedNewsData);
-//
-//         var newsData = [];
-//
-//
-//         var newsArray = parsedNewsData.result.docs;
-//         // var title = newsArray[0].source.enriched.url.title;
-//         var newsBlock = document.getElementById("news");
-//         //var headingElement = document.createElement('h5');
-//         // headingElement.className = "grey-text";
-//         // var headingText = document.createTextNode(title);
-//         // headingElement.appendChild(headingText);
-//         // newsBlock.prepend(headingElement);
-//
-//         newsArray.forEach(function(news){
-//           //newsData.push(news.source.enriched.url);
-//           var heading = document.createElement('div');
-//           heading.className = 'col l6 s12';
-//           heading.innerHTML = '<h5 class="grey-text">' +news.source.enriched.url.title+'</h5>';
-//           heading += '<p class="grey-text text-lighten-4">With memories like these in him, and, moreover, given to a certain superstitiousness, as has been said; the courage of this Starbuck which could, nevertheless, still flourish, must indeed have been extreme.</p>';
-//           console.log(heading);
-//           newsBlock.appendChild(heading);
-//         });
-//         //console.log(newsData);
-//
-//       }
-//       else if (xmlhttp.status == 400) {
-//         alert('There was an error 400');
-//       }
-//       else {
-//          alert('something else other than 200 was returned');
-//       }
-//     }
-//   };
-//
-//   xmlhttp.open("GET", url, true);
-//   xmlhttp.send();
-// }
-//loadXMLDoc('https://gateway-a.watsonplatform.net/calls/data/GetNews?outputMode=json&start=now-3d&end=now&count=5&q.enriched.url.title='+ keyword +'&return=enriched.url.url,enriched.url.title,enriched.url.text&apikey=' + url);
-
-
-//console.log(newsData);
 </script>

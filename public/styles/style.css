@@ -27,7 +27,11 @@ h1, h2, h3, h4, h5, h6 {
 
 .newsBlock {
 	box-shadow: 0 0 4px rgba(0,0,0,0.1);
-  border: solid 1px white;
+  border: solid 1px white;  
+}
+
+.newsBlock p:hover {	
+	cursor: pointer;
 }
 
 .usertext, .subheading {

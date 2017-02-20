@@ -28,18 +28,25 @@ app.post('/searchresults', function(req, res) {
   var spanTags = apiHelpers.getRelatedTerms(keyword).then(function(terms) {
     return terms[0].map(function(result){
       return result.text;
-    });;
+    });
   });
+  var news = apiHelpers.getNews(keyword).then(function(news) {
+    return news;
+  }).catch(function(err) {
+    return err;
+  });
+  
 
   apiHelpers.getTweets(keyword).then(function(statuses) {
     var emotionObj = apiHelpers.getTones(statuses);
       return emotionObj;
-    }).then(function(emotionObj) {
+    }).then(function(emotionObj) {      
         res.render('searchresults', {
           emotionObj: emotionObj,
           keyword : keyword,
           spanTags: spanTags,
-          url: process.env.alchemyAPI2 || keys.alchemyAPI2
+          news: news,
+          url: process.env.alchemyAPI || keys.alchemyAPI
         });
       });
 }); // end post Call
