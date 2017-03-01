@@ -2,7 +2,7 @@ var Promise = require('bluebird');
 var request = require('request');
 var Twitter = require('twitter');
 var ToneAnalyzerV3 = require('watson-developer-cloud/tone-analyzer/v3');
-// var keys = require('../api/apiKeys');
+var keys = require('../api/apiKeys');
 
 //============Twitter===========
 var client = new Twitter({
@@ -66,28 +66,29 @@ var apiHelpers = {
 	getTweets: function(keyword) {
 		return new Promise(function(resolve, reject) {
 			client.get(`https://api.twitter.com/1.1/search/tweets.json?q=${keyword}&lang=en&result_type=mixed&count=100`, 
-			function(error, tweets, response) {	      
-	      if(error) {
-	        console.log(error);
-	      } else {
-	        tweets.statuses.filter(function(tweetObj) {	        		          
-	          return helpers.isReply(tweetObj);
-	        });	        
-	        resolve(tweets.statuses);
-	      }
-    	});
+				function(error, tweets, response) {	      
+		      if(error) {
+		        console.log(error);
+		      } else {
+		        tweets.statuses.filter(function(tweetObj) {	        		          
+		          return helpers.isReply(tweetObj);
+		        });		        
+		        resolve(tweets.statuses);
+		      }
+	    	});
 		});
 	},
 	getTones: function(statuses) {
 		var highestTone = [];
-    var emotionObj  = {
-      Sadness : 0,
-      Anger   : 0,
-      Disgust : 0,
-      Fear    : 0,
-      Joy     : 0
-    };
+    
     return new Promise(function(resolve,reject) {
+    	var emotionObj  = {
+	      Sadness : 0,
+	      Anger   : 0,
+	      Disgust : 0,
+	      Fear    : 0,
+	      Joy     : 0
+	    };
     	statuses.forEach(function(tweet) {    		
     		tone_analyzer.tone({ text: tweet.text},
 	        function(err, tones) {
@@ -96,11 +97,12 @@ var apiHelpers = {
 	          } else {
 	          	var singleTone = helpers.getHighestToneScore(tones);
 	            if(!emotionObj[singleTone.tone_name]){
-	              emotionObj[singleTone.tone_name] = 1;
+	              emotionObj[singleTone.tone_name] = 1;	              
 	            } else {
-	              emotionObj[singleTone.tone_name]++;
+	              emotionObj[singleTone.tone_name]++;	              
 	            }
-	          }		    		
+	          }
+	          // emotionObj here gets about 100 total but on server there's only 1 or 2
 			      resolve(emotionObj);
 	      	});
     	});
@@ -120,8 +122,7 @@ var apiHelpers = {
   	let news;
   	return new Promise(function(resolve, reject) {
 	    request(url, function (error, response, body) {
-	      var jsonData = JSON.parse(body);
-	      console.log(jsonData.result);  
+	      var jsonData = JSON.parse(body);	      
 	      if (!jsonData.result.docs) {
 	      	reject("Sorry, we're unable to find any news articles about " + keyword);
 	      }

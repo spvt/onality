@@ -24,8 +24,7 @@
   var url = <%- JSON.stringify(url) %>;
   var news = <%- JSON.stringify(news) %>;
   var spanTags = <%- JSON.stringify(spanTags) %>;
-  var newsData;
-  
+  var newsData;  
   if (Array.isArray(news.fulfillmentValue)) {
     newsData = news.fulfillmentValue.map(function(payload) {
       return payload.source.enriched.url;

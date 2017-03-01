@@ -2,10 +2,11 @@ var express  = require('express'),
     Promise  = require('bluebird'),
     watson   = require('watson-developer-cloud'),
     alchemyDataNews = require('watson-developer-cloud/alchemy-data-news/v1'),
-    bodyParser = require('body-parser'),    
+    bodyParser = require('body-parser'),
+    fs       = require('fs'),  
     helpers  = require('./scripts/helpers').helpers,
     apiHelpers  = require('./scripts/helpers').apiHelpers,
-    // keys     = require('./api/apiKeys'),
+    keys     = require('./api/apiKeys'),
     app      = express(),
     port     = process.env.PORT || 5000;
 
@@ -36,11 +37,12 @@ app.post('/searchresults', function(req, res) {
     return err;
   });
   
-
   apiHelpers.getTweets(keyword).then(function(statuses) {
-    var emotionObj = apiHelpers.getTones(statuses);
+    // fs.writeFile('./api/tweets.json', JSON.stringify(statuses));
+    // console.log(statuses)
+    var emotionObj = apiHelpers.getTones(statuses);    
       return emotionObj;
-    }).then(function(emotionObj) {      
+    }).then(function(emotionObj) {
         res.render('searchresults', {
           emotionObj: emotionObj,
           keyword : keyword,
